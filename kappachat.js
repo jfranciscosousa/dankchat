@@ -10,9 +10,10 @@ app.use(express.static(__dirname + '/public'));
 var users = [];
 
 io.on('connection', function(socket) {
+
   socket.on('add user', function(msg) {
     socket.username = msg;
-    //if the user exists (binary search)
+    //if the user is not logged in (binary search)
     if (_.indexOf(users, msg, true) == -1) {
       //determine the sorted index (mantain the array sorted)
       var index = _.sortedIndex(users, msg);
@@ -20,19 +21,26 @@ io.on('connection', function(socket) {
       users.splice(index, 0, msg);
       console.log(users);
       var numUsers = _.size(users);
+      //tell the clients a new user joined
       socket.broadcast.emit('user joined', {
         username: msg,
         numUsers: numUsers
       });
+      //tel the user he successfully logged in
       socket.emit('login', {
         numUsers: numUsers
       });
-    } else {
+    }
+    // if the username is already in use
+    else {
+      //tel the client that the login failed
       socket.emit('login-fail');
     }
   });
 
+  //on disconnect event
   socket.on('disconnect', function() {
+    //if the disconnect event is sent by an actual user
     if (socket.username) {
       var index = _.indexOf(users, socket.username);
       users.splice(index, 1);
@@ -40,9 +48,11 @@ io.on('connection', function(socket) {
     }
   });
 
-  // when the client emits 'new message', this listens and executes
+  //on new message event
   socket.on('new message', function(data) {
+    //log the message
     console.log(socket.username + ": " + data);
+    //broadcast the message to other users
     socket.broadcast.emit('new message', {
       username: socket.username,
       message: data
