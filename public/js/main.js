@@ -80,9 +80,13 @@ $(function() {
     });
 
     var d = new Date();
+    var options = {
+      hour: "2-digit",
+      minute: "2-digit"
+    };
 
     var $usernameDiv = $('<span class="username"/>')
-      .text("[" + d.getHours() + ":" + d.getMinutes() + "] " + data.username)
+      .text("[" + d.toLocaleTimeString("pt-PT", options) + "] " + data.username)
       .css('color', getUsernameColor(data.username));
 
     var $messageBodyDiv = $('<span class="messageBody">')
@@ -208,10 +212,19 @@ $(function() {
     }
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
+      var input = $currentInput.val();
       if (username) {
-        sendMessage();
-        socket.emit('stop typing');
-        typing = false;
+        if (input.startsWith("/music")) {
+          var args = input.split(" ");
+          var aux = '<iframe width="300" height="300" src="https://www.youtube.com/embed/youtubeID?autoplay=1">';
+          aux=aux.replace("youtubeID",args[1]);
+          $loginPage.append($(aux));
+          $inputMessage.val('');
+        } else {
+          sendMessage();
+          socket.emit('stop typing');
+          typing = false;
+        }
       } else {
         if (hasWhiteSpace($usernameInput.val())) {
           window.alert("No spaces allowed!");
