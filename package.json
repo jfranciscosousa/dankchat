@@ -1,7 +1,7 @@
 {
-  "name": "socket-chat-example",
+  "name": "DankChat",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "The Dankest Chat Room for Dank Memers",
   "dependencies": {
     "autolinker": "^0.18.1",
     "compression": "^1.6.0",
