@@ -84,10 +84,18 @@ $(function() {
     var $usernameDiv = $('<span class="username"/>')
       .text("[" + d.getHours() + ":" + d.getMinutes() + "] " + data.username)
       .css('color', getUsernameColor(data.username));
+
     var $messageBodyDiv = $('<span class="messageBody">')
       .html(messageText);
 
+    var $separator = $('<span>')
+      .text(':')
+      .css('color', 'black');
+
+    $usernameDiv.append($separator);
+
     var typingClass = data.typing ? 'typing' : '';
+
     var $messageDiv = $('<li class="message"/>')
       .data('username', data.username)
       .addClass(typingClass)
@@ -187,6 +195,10 @@ $(function() {
     return COLORS[index];
   }
 
+  function hasWhiteSpace(s) {
+    return s.indexOf(' ') >= 0;
+  }
+
   // Keyboard events
 
   $window.keydown(function(event) {
@@ -201,7 +213,11 @@ $(function() {
         socket.emit('stop typing');
         typing = false;
       } else {
-        setUsername();
+        if (hasWhiteSpace($usernameInput.val())) {
+          window.alert("No spaces allowed!");
+        } else {
+          setUsername();
+        }
       }
     }
   });
@@ -237,8 +253,8 @@ $(function() {
     connected = true;
     // Display the welcome message
     var message = "Welcome to Socket.IO Chat";
-    for(i = 0;i<data.loggedUsers.length;i++){
-      $userList.append($('<li class="list-group-item">').attr('id',data.loggedUsers[i]).text(data.loggedUsers[i]));
+    for (i = 0; i < data.loggedUsers.length; i++) {
+      $userList.append($('<li class="list-group-item">').attr('id', data.loggedUsers[i]).text(data.loggedUsers[i]));
     }
   });
 
@@ -259,13 +275,13 @@ $(function() {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function(data) {
     log(data.username + ' joined');
-    $userList.append($('<li class="list-group-item">').attr('id',data.username).text(data.username));
+    $userList.append($('<li class="list-group-item">').attr('id', data.username).text(data.username));
   });
 
   // Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', function(data) {
     log(data.username + ' left');
-    $('#'+data.username).remove();
+    $('#' + data.username).remove();
     removeChatTyping(data);
   });
 
