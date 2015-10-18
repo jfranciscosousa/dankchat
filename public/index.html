@@ -6,19 +6,22 @@
   <title>Dank Chat</title>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 
 <body>
   <audio id="notif" src="./sound/notif.mp3" preload="auto"></audio>
   <ul class="pages">
-    <li id="chat" class="chat page">
+    <div id="chat" class="chat page">
       <div class="chatArea">
         <ul class="messages"></ul>
-        <ul class="userList"></ul>
+        <ul class="list-group" id="userList" style="float:left; height:100%; width:20%; margin:0; font-size:150%"></ul>
       </div>
-      <input class="inputMessage" placeholder="Type here..." />
-    </li>
+      <input id="inputMessage" class="inputMessage" placeholder="Type here..." />
+    </div>
     <li class="login page">
       <div class="form">
         <h3 class="title">What's your nickname?</h3>
@@ -28,10 +31,10 @@
   </ul>
 
   <script src="./js/Autolinker.min.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="./js/kappa.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket.io.js"></script>
   <script src="/js/main.js"></script>
+  <link rel="stylesheet" href="./css/style.css">
 </body>
 
 </html>

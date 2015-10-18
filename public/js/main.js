@@ -11,8 +11,8 @@ $(function() {
   var $window = $(window);
   var $usernameInput = $('.usernameInput'); // Input for username
   var $messages = $('.messages'); // Messages area
-  var $inputMessage = $('.inputMessage'); // Input message input box
-  var $userList = $('.userList');
+  var $inputMessage = $('#inputMessage'); // Input message input box
+  var $userList = $('#userList');
 
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
@@ -238,7 +238,7 @@ $(function() {
     // Display the welcome message
     var message = "Welcome to Socket.IO Chat";
     for(i = 0;i<data.loggedUsers.length;i++){
-      $userList.append($("<li>").attr('id',data.loggedUsers[i]).text(data.loggedUsers[i]));
+      $userList.append($('<li class="list-group-item">').attr('id',data.loggedUsers[i]).text(data.loggedUsers[i]));
     }
   });
 
@@ -259,7 +259,7 @@ $(function() {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function(data) {
     log(data.username + ' joined');
-    $userList.append($("<li>").attr('id',data.username).text(data.username));
+    $userList.append($('<li class="list-group-item">').attr('id',data.username).text(data.username));
   });
 
   // Whenever the server emits 'user left', log it in the chat body

@@ -4,7 +4,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var autolinker = require('autolinker');
 var _ = require('underscore');
+var compress = require('compression');
 
+
+app.use(compress());
 app.use(express.static(__dirname + '/public'));
 
 var users = [];
