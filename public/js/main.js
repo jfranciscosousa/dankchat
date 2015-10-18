@@ -12,6 +12,7 @@ $(function() {
   var $usernameInput = $('.usernameInput'); // Input for username
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
+  var $userList = $('.userList');
 
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
@@ -24,16 +25,6 @@ $(function() {
   var $currentInput = $usernameInput.focus();
 
   var socket = io();
-
-  function addParticipantsMessage(data) {
-    var message = '';
-    if (data.numUsers === 1) {
-      message += "there's 1 participant";
-    } else {
-      message += "there are " + data.numUsers + " participants";
-    }
-    log(message);
-  }
 
   // Sets the client's username
   function setUsername() {
@@ -217,11 +208,11 @@ $(function() {
 
   var playNotif = false;
 
-  window.onfocus = function () {
+  window.onfocus = function() {
     playNotif = false;
   };
 
-  window.onblur = function () {
+  window.onblur = function() {
     playNotif = true;
   };
 
@@ -246,13 +237,12 @@ $(function() {
     connected = true;
     // Display the welcome message
     var message = "Welcome to Socket.IO Chat";
-    log(message, {
-      prepend: true
-    });
-    addParticipantsMessage(data);
+    for(i = 0;i<data.loggedUsers.length;i++){
+      $userList.append($("<li>").attr('id',data.loggedUsers[i]).text(data.loggedUsers[i]));
+    }
   });
 
-  socket.on('login-fail', function(){
+  socket.on('login-fail', function() {
     username = null;
     $loginPage.show();
     $chatPage.fadeOut();
@@ -269,13 +259,13 @@ $(function() {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function(data) {
     log(data.username + ' joined');
-    addParticipantsMessage(data);
+    $userList.append($("<li>").attr('id',data.username).text(data.username));
   });
 
   // Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', function(data) {
     log(data.username + ' left');
-    addParticipantsMessage(data);
+    $('#'+data.username).remove();
     removeChatTyping(data);
   });
 

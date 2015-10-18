@@ -28,7 +28,8 @@ io.on('connection', function(socket) {
       });
       //tel the user he successfully logged in
       socket.emit('login', {
-        numUsers: numUsers
+        numUsers: numUsers,
+        loggedUsers: users
       });
     }
     // if the username is already in use
@@ -45,6 +46,10 @@ io.on('connection', function(socket) {
       var index = _.indexOf(users, socket.username);
       users.splice(index, 1);
       console.log(users);
+      socket.broadcast.emit('user left', {
+        username: socket.username,
+        numUsers: _.size(users)
+      });
     }
   });
 
