@@ -85,6 +85,10 @@ $(function() {
       .text("[" + d.toLocaleTimeString("pt-PT", options) + "] " + data.username)
       .css('color', getUsernameColor(data.username));
 
+    data.message = Autolinker.link(data.message, {
+      className: "myLink"
+    });
+
     var $messageBodyDiv = $('<span class="messageBody">')
       .html(data.message);
 
@@ -263,7 +267,11 @@ $(function() {
     // Display the welcome message
     var message = "Welcome to Socket.IO Chat";
     for (i = 0; i < data.loggedUsers.length; i++) {
-      $userList.append($('<li class="list-group-item">').attr('id', data.loggedUsers[i]).text(data.loggedUsers[i]));
+      if (data.loggedUsers[i] == username) {
+        $userList.append($('<li class="list-group-item active">').attr('id', data.loggedUsers[i]).text(data.loggedUsers[i]));
+      } else {
+        $userList.append($('<li class="list-group-item">').attr('id', data.loggedUsers[i]).text(data.loggedUsers[i]));
+      }
     }
   });
 
@@ -275,9 +283,6 @@ $(function() {
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function(data) {
-    data = Autolinker.link(data, {
-      className: "myLink"
-    });
     addChatMessage(data);
     var notif = document.getElementById('notif');
     notif.volume = 1;
