@@ -7,12 +7,22 @@ var _ = require('underscore');
 var compress = require('compression');
 var low = require('lowdb');
 
+//function returns true if auth is successfully
+//also register the user if he does not exist (likely to change)
 function auth(username, password) {
   var db = low('db.json');
   var info = db('users').find({
     username: username
   });
-  return info.password == password;
+  if (info)
+    return info.password == password;
+  else {
+    db('users').push({
+      username: username,
+      password: password
+    });
+  }
+  return true;
 }
 
 app.use(compress());
@@ -32,7 +42,7 @@ io.on('connection', function(socket) {
     //if the user is not logged in (binary search)
     if (_.indexOf(loggedUsers, data.username, true) == -1) {
       //authenticate user
-      if (auth(data.username,data.password)) {
+      if (auth(data.username, data.password)) {
         //determine the sorted index (mantain the array sorted)
         var index = _.sortedIndex(loggedUsers, data.username);
         //insert the element at the index
