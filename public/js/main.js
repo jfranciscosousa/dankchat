@@ -89,7 +89,7 @@ $(function() {
       className: "myLink"
     });
 
-    var $messageBodyDiv = $('<span class="messageBody">')
+    var $messageBodyDiv = $('<div class="messageBody">')
       .html(data.message);
 
     var $separator = $('<span>')
@@ -218,6 +218,11 @@ $(function() {
           var args = input.split(" ");
           var aux = '<iframe width="300" height="300" src="https://www.youtube.com/embed/youtubeID?autoplay=1">';
           aux = aux.replace("youtubeID", args[1]);
+          $loginPage.append($(aux));
+          $inputMessage.val('');
+        } else if (input.startsWith("/CARALHO")) {
+          var args = input.split(" ");
+          var aux = '<iframe width="300" height="300" src="https://www.youtube.com/embed/MCUq2IuY6mw?autoplay=1">';
           $loginPage.append($(aux));
           $inputMessage.val('');
         } else {

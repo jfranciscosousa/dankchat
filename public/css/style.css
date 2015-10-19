@@ -92,7 +92,9 @@ ul {
 /* Messages */
 
 .message {
-  height: 50px;
+  height: auto;
+  position: relative;
+  display: list-item;
 }
 .chatArea {
   height: 100%;
