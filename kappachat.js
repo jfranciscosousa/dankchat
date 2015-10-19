@@ -76,6 +76,13 @@ io.on('connection', function(socket) {
       });
     }
   });
+
+  socket.on('typing', function(data) {
+    socket.broadcast.emit('typing', {
+      username: socket.username
+    });
+    console.log(socket.username + 'is typing');
+  });
 });
 
 http.listen(80, function() {
