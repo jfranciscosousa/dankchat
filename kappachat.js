@@ -10,6 +10,7 @@ var compress = require('compression');
 app.use(compress());
 app.use(express.static(__dirname + '/public'));
 
+var htmlRegExp = new RegExp('</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|\'.*?\' | [ ^ \'\">\s]+))?)+\s*|\s*)/?>');
 var users = [];
 
 io.on('connection', function(socket) {
@@ -58,13 +59,22 @@ io.on('connection', function(socket) {
 
   //on new message event
   socket.on('new message', function(data) {
-    //log the message
-    console.log(socket.username + ": " + data);
-    //broadcast the message to other users
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
+    //test the message for markup
+
+    if (/<[a-z][\s\S]*>/i.test(data)) {
+      console.log("markup detected, ignored the message");
+    } else {
+      autolinker.link(data, {
+        className: "myLink"
+      });
+      //log the message
+      console.log(socket.username + ": " + data);
+      //broadcast the message to other users
+      socket.broadcast.emit('new message', {
+        username: socket.username,
+        message: data
+      });
+    }
   });
 });
 

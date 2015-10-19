@@ -75,10 +75,6 @@ $(function() {
       $typingMessages.remove();
     }
 
-    var messageText = Autolinker.link(data.message, {
-      className: "myLink"
-    });
-
     var d = new Date();
     var options = {
       hour: "2-digit",
@@ -90,7 +86,7 @@ $(function() {
       .css('color', getUsernameColor(data.username));
 
     var $messageBodyDiv = $('<span class="messageBody">')
-      .html(messageText);
+      .html(data.message);
 
     var $separator = $('<span>')
       .text(':')
@@ -279,6 +275,9 @@ $(function() {
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function(data) {
+    data = Autolinker.link(data, {
+      className: "myLink"
+    });
     addChatMessage(data);
     var notif = document.getElementById('notif');
     notif.volume = 1;
