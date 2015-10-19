@@ -5,36 +5,54 @@ var io = require('socket.io')(http);
 var autolinker = require('autolinker');
 var _ = require('underscore');
 var compress = require('compression');
+var low = require('lowdb');
 
+function auth(username, password) {
+  var db = low('db.json');
+  var info = db('users').find({
+    username: username
+  });
+  return info.password == password;
+}
 
 app.use(compress());
 app.use(express.static(__dirname + '/public'));
 
 var htmlRegExp = new RegExp('</?\w+((\s+\w+(\s*=\s*(?:\".*?\"|\'.*?\' | [ ^ \'\">\s]+))?)+\s*|\s*)/?>');
-var users = [];
+var users = {
+  'José': '1234',
+  'MirandaDeus': '1234'
+};
+var loggedUsers = [];
 
 io.on('connection', function(socket) {
 
-  socket.on('add user', function(msg) {
-    socket.username = msg;
+  socket.on('add user', function(data) {
+    socket.username = data.username;
     //if the user is not logged in (binary search)
-    if (_.indexOf(users, msg, true) == -1) {
-      //determine the sorted index (mantain the array sorted)
-      var index = _.sortedIndex(users, msg);
-      //insert the element at the index
-      users.splice(index, 0, msg);
-      console.log(users);
-      var numUsers = _.size(users);
-      //tell the clients a new user joined
-      socket.broadcast.emit('user joined', {
-        username: msg,
-        numUsers: numUsers
-      });
-      //tel the user he successfully logged in
-      socket.emit('login', {
-        numUsers: numUsers,
-        loggedUsers: users
-      });
+    if (_.indexOf(loggedUsers, data.username, true) == -1) {
+      //authenticate user
+      if (auth(data.username,data.password)) {
+        //determine the sorted index (mantain the array sorted)
+        var index = _.sortedIndex(loggedUsers, data.username);
+        //insert the element at the index
+        loggedUsers.splice(index, 0, data.username);
+        console.log(loggedUsers);
+        var numUsers = _.size(users);
+        //tell the clients a new user joined
+        socket.broadcast.emit('user joined', {
+          username: socket.username,
+          numUsers: numUsers
+        });
+        //tel the user he successfully logged in
+        socket.emit('login', {
+          numUsers: numUsers,
+          loggedUsers: loggedUsers
+        });
+      } //wrong password
+      else {
+        socket.emit('login-fail');
+      }
     }
     // if the username is already in use
     else {
@@ -48,11 +66,11 @@ io.on('connection', function(socket) {
     //if the disconnect event is sent by an actual user
     if (socket.username) {
       var index = _.indexOf(users, socket.username);
-      users.splice(index, 1);
+      loggedUsers.splice(index, 1);
       console.log(users);
       socket.broadcast.emit('user left', {
         username: socket.username,
-        numUsers: _.size(users)
+        numUsers: _.size(loggedUsers)
       });
     }
   });
@@ -69,19 +87,12 @@ io.on('connection', function(socket) {
       });
       //log the message
       console.log(socket.username + ": " + data);
-      //broadcast the message to other users
+      //broadcast the message to other loggedUsers
       socket.broadcast.emit('new message', {
         username: socket.username,
         message: data
       });
     }
-  });
-
-  socket.on('typing', function(data) {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-    console.log(socket.username + 'is typing');
   });
 });
 

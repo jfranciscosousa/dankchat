@@ -36,7 +36,7 @@ ul {
 
 .login.page {
   background-size: cover;
-  background-image: url("https://scontent.xx.fbcdn.net/hphotos-frc3/v/t1.0-9/10659337_287223058135228_530988540605064398_n.jpg?oh=c5d611cdc53f747587b677865508645b&oe=56CAEC24");
+  /*background-image: url("https://scontent.xx.fbcdn.net/hphotos-frc3/v/t1.0-9/10659337_287223058135228_530988540605064398_n.jpg?oh=c5d611cdc53f747587b677865508645b&oe=56CAEC24");*/
   background-color: #000;
 }
 .login.page .form {

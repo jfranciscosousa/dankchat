@@ -9,7 +9,8 @@ $(function() {
 
   // Initialize varibles
   var $window = $(window);
-  var $usernameInput = $('.usernameInput'); // Input for username
+  var $usernameInput = $('#usernameInput'); // Input for username
+  var $passwordInput = $('#passwordInput'); // Input for password
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('#inputMessage'); // Input message input box
   var $userList = $('#userList');
@@ -29,13 +30,16 @@ $(function() {
   // Sets the client's username
   function setUsername() {
     username = cleanInput($usernameInput.val().trim());
-
+    password = $passwordInput.val();
     // If the username is valid
     if (username) {
       $currentInput = $inputMessage.focus();
 
       // Tell the server your username
-      socket.emit('add user', username);
+      socket.emit('add user', {
+        username: username,
+        password: password
+      });
     }
   }
 
@@ -204,7 +208,7 @@ $(function() {
 
   $window.keydown(function(event) {
     // Auto-focus the current input when a key is typed
-    if (!(event.ctrlKey || event.metaKey || event.altKey)) {
+    if (!(event.ctrlKey || event.metaKey || event.altKey) && username) {
       $currentInput.focus();
     }
     // When the client hits ENTER on their keyboard
@@ -284,8 +288,6 @@ $(function() {
 
   socket.on('login-fail', function() {
     username = null;
-    $loginPage.show();
-    $chatPage.fadeOut();
   });
 
   // Whenever the server emits 'new message', update the chat body
