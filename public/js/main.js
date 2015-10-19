@@ -217,7 +217,7 @@ $(function() {
         if (input.startsWith("/music")) {
           var args = input.split(" ");
           var aux = '<iframe width="300" height="300" src="https://www.youtube.com/embed/youtubeID?autoplay=1">';
-          aux=aux.replace("youtubeID",args[1]);
+          aux = aux.replace("youtubeID", args[1]);
           $loginPage.append($(aux));
           $inputMessage.val('');
         } else {
@@ -288,7 +288,8 @@ $(function() {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function(data) {
     log(data.username + ' joined');
-    $userList.append($('<li class="list-group-item">').attr('id', data.username).text(data.username));
+    if (username)
+      $userList.append($('<li class="list-group-item">').attr('id', data.username).text(data.username));
   });
 
   // Whenever the server emits 'user left', log it in the chat body
