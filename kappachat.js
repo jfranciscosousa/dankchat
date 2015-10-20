@@ -1,4 +1,5 @@
 var express = require('express');
+var app = express();
 var fs = require('fs');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -8,7 +9,6 @@ var compress = require('compression');
 var low = require('lowdb');
 var crypto = require('crypto');
 
-var app = express();
 var cipher = crypto.createCipher('aes-256-cbc', 'salt');
 var password, algorithm = 'aes-256-ctr';
 
