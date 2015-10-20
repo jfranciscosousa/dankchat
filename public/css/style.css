@@ -36,8 +36,8 @@ ul {
 
 .login.page {
   background-size: cover;
-  /*background-image: url("https://scontent.xx.fbcdn.net/hphotos-frc3/v/t1.0-9/10659337_287223058135228_530988540605064398_n.jpg?oh=c5d611cdc53f747587b677865508645b&oe=56CAEC24");*/
   background-color: #000;
+  background-image: url("/rarepepe.jpg");
 }
 .login.page .form {
   height: 100px;
@@ -47,7 +47,7 @@ ul {
   top: 50%;
   width: 100%;
 }
-.login.page .form .usernameInput {
+.login.page .form .textInput {
   background-color: transparent;
   border: none;
   border-bottom: 2px solid #fff;
@@ -59,11 +59,11 @@ ul {
 .login.page .title {
   font-size: 200%;
 }
-.login.page .usernameInput {
+.login.page .textInput {
   font-size: 200%;
   letter-spacing: 3px;
 }
-.login.page .title, .login.page .usernameInput {
+.login.page .title, .login.page .textInput {
   color: #fff;
   font-weight: 100;
 }
