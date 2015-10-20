@@ -29,5 +29,8 @@ node_modules
 # Certs directory
 certs
 
-#Database files
+# Database files
 *.db
+
+# Executables
+*.exe
