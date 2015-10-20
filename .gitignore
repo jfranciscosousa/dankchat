@@ -36,4 +36,4 @@ certs
 *.exe
 
 # Encryption Key
-key
+key.txt

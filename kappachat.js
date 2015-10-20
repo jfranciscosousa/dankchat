@@ -11,7 +11,7 @@ var crypto = require('crypto');
 // encryption
 var key, algorithm = 'aes-256-ctr';
 
-fs.readFile('key', 'utf8', function(err, data) {
+fs.readFile('key.txt', 'utf8', function(err, data) {
   if (err) {
     //rip in pepperonis
     return console.log(err);
@@ -64,7 +64,6 @@ function auth(username, password) {
   if (password.length < 6)
     return false;
   password = encrypt(password);
-  var db = low('db.json');
   var info = getUserInfo(username);
   if (info)
     return info.password == password;
