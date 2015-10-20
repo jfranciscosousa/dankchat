@@ -34,3 +34,6 @@ certs
 
 # Executables
 *.exe
+
+# Encryption Key
+key
