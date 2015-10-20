@@ -10,7 +10,7 @@ var low = require('lowdb');
 var crypto = require('crypto');
 
 var cipher = crypto.createCipher('aes-256-cbc', 'salt');
-var password, algorithm = 'aes-256-ctr';
+var key, algorithm = 'aes-256-ctr';
 
 fs.readFile('key', 'utf8', function(err, data) {
   if (err) {
@@ -18,11 +18,11 @@ fs.readFile('key', 'utf8', function(err, data) {
     return console.log(err);
   }
   console.log("loaded encryption key");
-  password = data;
+  key = data;
 });
 
 function encrypt(text) {
-  var cipher = crypto.createCipher(algorithm, password)
+  var cipher = crypto.createCipher(algorithm, key)
   var crypted = cipher.update(text, 'utf8', 'hex')
   crypted += cipher.final('hex');
   return crypted;
@@ -41,7 +41,6 @@ function auth(username, password) {
   if (info)
     return info.password == password;
   else {
-    var encryptedPassword = cipher.final('base64');
     db('users').push({
       username: username,
       password: password
