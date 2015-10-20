@@ -6,10 +6,9 @@ var io = require('socket.io')(http);
 var autolinker = require('autolinker');
 var _ = require('underscore');
 var compress = require('compression');
-var low = require('lowdb');
 var crypto = require('crypto');
 
-var cipher = crypto.createCipher('aes-256-cbc', 'salt');
+// encryption
 var key, algorithm = 'aes-256-ctr';
 
 fs.readFile('key', 'utf8', function(err, data) {
@@ -28,6 +27,37 @@ function encrypt(text) {
   return crypted;
 }
 
+// database
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('users.db');
+
+db.serialize(function() {
+  db.run("CREATE TABLE  IF NOT EXISTS users (username TEXT, password TEXT)");
+});
+
+function addUser(username, password) {
+  db.serialize(function() {
+    var stmt = db.prepare("INSERT INTO users VALUES (?,?)");
+    stmt.run(username, password);
+    stmt.finalize();
+
+  });
+}
+
+function getUserInfo(username) {
+  db.serialize(function() {
+
+    db.each("SELECT password from users where username=" + username, function(err, row) {
+      if (row) {
+        return row.password;
+      } else {
+        return null;
+      }
+    });
+  });
+}
+
 //function returns true if auth is successfully
 //also register the user if he does not exist (likely to change)
 function auth(username, password) {
@@ -35,22 +65,24 @@ function auth(username, password) {
     return false;
   password = encrypt(password);
   var db = low('db.json');
-  var info = db('users').find({
-    username: username
-  });
+  var info = getUserInfo(username);
   if (info)
     return info.password == password;
   else {
-    db('users').push({
-      username: username,
-      password: password
-    });
+    addUser(username, password);
     return true;
   }
 }
 
+// web server
+
 app.use(compress());
 app.use(express.static(__dirname + '/public'));
+http.listen(80, function() {
+  console.log('listening on *:80');
+});
+
+// chatroom
 
 var loggedUsers = [];
 
@@ -123,8 +155,4 @@ io.on('connection', function(socket) {
       });
     }
   });
-});
-
-http.listen(80, function() {
-  console.log('listening on *:80');
 });
