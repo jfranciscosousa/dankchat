@@ -12,7 +12,7 @@ var crypto = require('crypto');
 
 app.use(compress());
 app.use(express.static(__dirname + '/public'));
-http.listen(80, '192.168.1.101', function() {
+http.listen(80, '0.0.0.0', function() {
   console.log('listening on *:80');
 });
 
