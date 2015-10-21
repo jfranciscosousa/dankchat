@@ -13,6 +13,7 @@ $(function() {
   var $passwordInput = $('#passwordInput'); // Input for password
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('#inputMessage'); // Input message input box
+  var $errorMessage = $('#errorMessage');
   var $userList = $('#userList');
 
   var $loginPage = $('.login.page'); // The login page
@@ -34,7 +35,6 @@ $(function() {
     // If the username is valid
     if (username) {
       $currentInput = $inputMessage.focus();
-
       // Tell the server your username
       socket.emit('auth user', {
         username: username,
@@ -166,7 +166,6 @@ $(function() {
     if (connected) {
       if (!typing) {
         typing = true;
-        socket.emit('typing');
       }
       lastTypingTime = (new Date()).getTime();
 
@@ -174,7 +173,6 @@ $(function() {
         var typingTimer = (new Date()).getTime();
         var timeDiff = typingTimer - lastTypingTime;
         if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-          socket.emit('stop typing');
           typing = false;
         }
       }, TYPING_TIMER_LENGTH);
@@ -228,7 +226,6 @@ $(function() {
           $inputMessage.val('');
         } else {
           sendMessage();
-          socket.emit('stop typing');
           typing = false;
         }
       } else {
@@ -286,7 +283,8 @@ $(function() {
     }
   });
 
-  socket.on('login-fail', function() {
+  socket.on('login-fail', function(data) {
+    $errorMessage.text(data.reason);
     username = null;
   });
 
@@ -309,16 +307,6 @@ $(function() {
   socket.on('user left', function(data) {
     log(data.username + ' left');
     $('#' + data.username).remove();
-    removeChatTyping(data);
-  });
-
-  // Whenever the server emits 'typing', show the typing message
-  socket.on('typing', function(data) {
-    addChatTyping(data);
-  });
-
-  // Whenever the server emits 'stop typing', kill the typing message
-  socket.on('stop typing', function(data) {
     removeChatTyping(data);
   });
 });

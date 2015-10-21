@@ -1,22 +1,31 @@
 var express = require('express');
 var app = express();
 var fs = require('fs');
-var http = require('http').Server(app);
+var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var autolinker = require('autolinker');
 var _ = require('underscore');
 var compress = require('compression');
 var crypto = require('crypto');
 
+// web server
+
+app.use(compress());
+app.use(express.static(__dirname + '/public'));
+http.listen(80, '192.168.1.101', function() {
+  console.log('listening on *:80');
+});
+
+
 // encryption
 var key = fs.readFileSync('key.txt', 'utf8').toString(),
   algorithm = 'aes-256-ctr';
 
-function encrypt(text) {
+function encrypt(text, callback) {
   var cipher = crypto.createCipher(algorithm, key)
   var crypted = cipher.update(text, 'utf8', 'hex')
   crypted += cipher.final('hex');
-  return crypted;
+  callback(crypted);
 }
 
 // database
@@ -34,6 +43,7 @@ function addUser(username, password) {
     var stmt = db.prepare("INSERT INTO users VALUES (?,?)");
     stmt.run(username, password);
     stmt.finalize();
+    console.log('new user ' + username);
   });
 }
 
@@ -62,41 +72,45 @@ function logMessage(username, message) {
 //function returns true if auth is successfully
 //also register the user if he does not exist (likely to change)
 function auth(username, password, callback) {
-  if (password.length < 6)
-    return false;
-  password = encrypt(password);
-  getUserInfo(username, function(res) {
-    var info = res;
-    if (info)
-      res = info == password;
-    else {
-      addUser(username, password);
-      res = true;
-    }
-    callback(res);
+  var reason,res;
+  if (password.length < 6){
+    reason = 'Password is too short!';
+    res = false;
+    callback(res,reason);
+    return;
+  }
+  password = encrypt(password, function(password) {
+    getUserInfo(username, function(info) {
+      //if user is registered
+      if (info) {
+        //match password
+        if (info == password) {
+          reason = 'Password matches!'
+          res = true;
+        } else {
+          res = false;
+          reason = 'Wrong password!';
+        }
+      } else {
+        addUser(username, password);
+        reason = 'New user!';
+        res = true;
+      }
+      callback(res,reason);
+    });
   });
 }
-
-// web server
-
-app.use(compress());
-app.use(express.static(__dirname + '/public'));
-http.listen(80, function() {
-  console.log('listening on *:80');
-});
-
 // chatroom
 
 var loggedUsers = [];
 
 io.on('connection', function(socket) {
-
   socket.on('auth user', function(data) {
     socket.username = data.username;
     //if the user is not logged in (binary search)
     if (_.indexOf(loggedUsers, data.username, true) == -1) {
       //authenticate user
-      auth(data.username, data.password, function(authenticated) {
+      auth(data.username, data.password, function(authenticated,reason) {
         if (authenticated) {
           //determine the sorted index (mantain the array sorted)
           var index = _.sortedIndex(loggedUsers, data.username);
@@ -116,7 +130,9 @@ io.on('connection', function(socket) {
           });
         } //wrong password
         else {
-          socket.emit('login-fail');
+          socket.emit('login-fail', {
+            reason: reason
+          });
         }
       });
     }
