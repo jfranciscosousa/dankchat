@@ -18,8 +18,17 @@ http.listen(80, '192.168.1.101', function() {
 
 
 // encryption
-var key = fs.readFileSync('key.txt', 'utf8').toString(),
-  algorithm = 'aes-256-ctr';
+var key, algorithm = 'aes-256-ctr';
+
+try {
+  key = fs.readFileSync('key.txt', 'utf8').toString();
+} catch (err) {
+  // If the type is not what you want, then just throw the error again.
+  if (err.code !== 'ENOENT') throw err;
+
+  key = crypto.randomBytes(128).toString();
+  fs.writeFileSync('key.txt', key);
+}
 
 function encrypt(text, callback) {
   var cipher = crypto.createCipher(algorithm, key)
@@ -72,11 +81,11 @@ function logMessage(username, message) {
 //function returns true if auth is successfully
 //also register the user if he does not exist (likely to change)
 function auth(username, password, callback) {
-  var reason,res;
-  if (password.length < 6){
+  var reason, res;
+  if (password.length < 6) {
     reason = 'Password is too short!';
     res = false;
-    callback(res,reason);
+    callback(res, reason);
     return;
   }
   password = encrypt(password, function(password) {
@@ -96,7 +105,7 @@ function auth(username, password, callback) {
         reason = 'New user!';
         res = true;
       }
-      callback(res,reason);
+      callback(res, reason);
     });
   });
 }
@@ -110,7 +119,7 @@ io.on('connection', function(socket) {
     //if the user is not logged in (binary search)
     if (_.indexOf(loggedUsers, data.username, true) == -1) {
       //authenticate user
-      auth(data.username, data.password, function(authenticated,reason) {
+      auth(data.username, data.password, function(authenticated, reason) {
         if (authenticated) {
           //determine the sorted index (mantain the array sorted)
           var index = _.sortedIndex(loggedUsers, data.username);
