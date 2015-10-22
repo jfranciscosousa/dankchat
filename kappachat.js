@@ -21,13 +21,12 @@ http.listen(80, '0.0.0.0', function() {
 var key, algorithm = 'aes-256-ctr';
 
 try {
-  key = fs.readFileSync('key.txt', 'utf8').toString();
+  key = fs.readFileSync('dank.key', 'utf8').toString();
 } catch (err) {
-  // If the type is not what you want, then just throw the error again.
   if (err.code !== 'ENOENT') throw err;
-
+  //file doesnt exist - generate new key, save it to file
   key = crypto.randomBytes(128).toString();
-  fs.writeFileSync('key.txt', key);
+  fs.writeFileSync('dank.key', key);
 }
 
 function encrypt(text, callback) {
