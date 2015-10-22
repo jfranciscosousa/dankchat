@@ -37,3 +37,7 @@ certs
 
 # Encryption Key
 key.txt
+
+# Json files
+
+*.json
