@@ -36,7 +36,7 @@ certs
 *.exe
 
 # Encryption Key
-key.txt
+*.key
 
 # Json files
 
