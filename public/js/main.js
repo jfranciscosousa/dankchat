@@ -252,11 +252,8 @@ $(function() {
     updateTyping();
   });
 
-  // Click events
-
-  // Focus input when clicking anywhere on login page
-  $loginPage.click(function() {
-    $currentInput.focus();
+  $passwordInput.click(function(){
+    $passwordInput.focus();
   });
 
   // Focus input when clicking on the message input's border
