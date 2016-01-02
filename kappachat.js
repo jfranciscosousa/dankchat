@@ -11,9 +11,9 @@ var crypto = require('crypto');
 // web server
 
 app.use(compress());
-app.use(express.static(__dirname + '/public'));
-http.listen(80, '0.0.0.0', function() {
-  console.log('listening on *:80');
+app.use("/",express.static(__dirname + '/public'));
+http.listen(8080, '0.0.0.0', function() {
+  console.log('listening on *:8080');
 });
 
 
@@ -42,8 +42,8 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('users.db');
 
 db.serialize(function() {
-  db.run("CREATE TABLE  IF NOT EXISTS users (username TEXT UNIQUE, password TEXT)");
-  db.run("CREATE TABLE  IF NOT EXISTS messages (date DATE DEFAULT (datetime('now','localtime')), username TEXT, message TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS users (username TEXT UNIQUE, password TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS messages (date DATE DEFAULT (datetime('now','localtime')), username TEXT, message TEXT)");
 });
 
 function addUser(username, password) {
