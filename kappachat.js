@@ -49,7 +49,7 @@ db.connect(conString, function(err, client, done) {
         return console.error('error fetching client from pool', err);
     }
     client.query("CREATE TABLE IF NOT EXISTS users (username TEXT UNIQUE, password TEXT)");
-    client.query("CREATE TABLE IF NOT EXISTS messages (date DATE DEFAULT (datetime('now','localtime')), username TEXT, message TEXT)");
+    client.query("CREATE TABLE IF NOT EXISTS messages (date DATE DEFAULT (timestamp timestamp default current_timestamp, username TEXT, message TEXT)");
 
     function addUser(username, password) {
         var stmt = client.query("INSERT INTO users VALUES ($1,$2)", [username, password], function(err, result) {
