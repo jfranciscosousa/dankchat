@@ -12,7 +12,7 @@ var crypto = require('crypto');
 
 app.use(compress());
 app.use("/",express.static(__dirname + '/public'));
-http.listen(8080, '0.0.0.0', function() {
+http.listen(process.env.PORT || 8080, '0.0.0.0', function() {
   console.log('listening on *:8080');
 });
 
