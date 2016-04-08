@@ -20,14 +20,7 @@ http.listen(process.env.PORT || 8080, '0.0.0.0', function() {
 // encryption
 var key, algorithm = 'aes-256-ctr';
 
-try {
-    key = fs.readFileSync('dank.key', 'utf8').toString();
-} catch (err) {
-    if (err.code !== 'ENOENT') throw err;
-    //file doesnt exist - generate new key, save it to file
-    key = crypto.randomBytes(128).toString();
-    fs.writeFileSync('dank.key', key);
-}
+key = process.env.ENCRYPTION_KEY
 
 function encrypt(text, callback) {
     var cipher = crypto.createCipher(algorithm, key)
