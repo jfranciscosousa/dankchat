@@ -17,8 +17,8 @@
                 // GET list of Global Emotes from Twitch Emotes API v2
                 $.ajax({
                     url: 'http://twitchemotes.com/api_cache/v2/global.json',
-										crossDomain: true,
-										dataType: 'jsonp',
+                    crossDomain: true,
+                    dataType: 'json',
                     success: function(data) {
                         sessionStorage.setItem('twitchEmotesAPI', JSON.stringify(data));
                         define(sessionStorage.getItem('twitchEmotesAPI'));
