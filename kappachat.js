@@ -38,40 +38,45 @@ function encrypt(text, callback) {
 
 // database
 
-var db = require('pg');
-var conString = "postgres://aflpjnbemhjumc:hhq33TCCGUuinmQo0BYqj4mnp5@ec2-46-137-125-22.eu-west-1.compute.amazonaws.com:5432/d42jg2slue5pfl";
+var db = require("pg");
 
-//this initializes a connection pool
-//it will keep idle connections open for a (configurable) 30 seconds
-//and set a limit of 10 (also configurable)
-db.connect(conString, function(err, client, done) {
-    if (err) {
-        return console.error('error fetching client from pool', err);
-    }
-    client.query("CREATE TABLE IF NOT EXISTS users (username TEXT UNIQUE, password TEXT)");
-    client.query("CREATE TABLE IF NOT EXISTS messages (date timestamp default current_timestamp, username TEXT, message TEXT)");
-
-    function addUser(username, password) {
-        var stmt = client.query("INSERT INTO users VALUES ($1,$2)", [username, password], function(err, result) {
-            console.log('new user ' + username);
-        });
-    }
-
-    function getUserInfo(username, callback) {
-        var stmt = client.prepare("SELECT password from users where username=$1", [username], function(err, res) {
-            if (res.rows[0]) {
-                res = rows[0].password;
-            } else {
-                res = null;
-            }
-            callback(res);
-        });
-    }
-
-    function logMessage(username, message) {
-        client.query("INSERT INTO messages (username,message) VALUES($1,$2)", [username, message]);
-    }
+var client = new db.Client({
+    user: "aflpjnbemhjumc",
+    password: "hhq33TCCGUuinmQo0BYqj4mnp5",
+    database: "d42jg2slue5pfl",
+    port: 5432,
+    host: "ec2-46-137-125-22.eu-west-1.compute.amazonaws.com",
+    ssl: true
 });
+
+client.connect();
+
+
+var q1 = client.query("CREATE TABLE IF NOT EXISTS users (username TEXT UNIQUE, password TEXT)");
+var q2 = client.query("CREATE TABLE IF NOT EXISTS messages (date timestamp default current_timestamp, username TEXT, message TEXT)");
+
+
+function addUser(username, password) {
+    var stmt = client.query("INSERT INTO users VALUES ($1,$2)", [username, password], function(err, result) {
+        console.log('new user ' + username);
+    });
+}
+
+function getUserInfo(username, callback) {
+    var res;
+    var stmt = client.query("SELECT password from users where username=$1", [username], function(err, result) {
+        if (result.rows[0]) {
+            res = result.rows[0].password;
+        } else {
+            res = null;
+        }
+        callback(res);
+    });
+}
+
+function logMessage(username, message) {
+    client.query("INSERT INTO messages (username,message) VALUES($1,$2)", [username, message]);
+}
 
 
 
