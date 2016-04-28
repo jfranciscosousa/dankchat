@@ -15,7 +15,9 @@ app.use("/", express.static(__dirname + '/public'));
 http.listen(process.env.PORT || 8080, '0.0.0.0', function() {
     console.log('listening on *:8080');
 });
-
+app.get("/kappa", function(req,res){
+    res.redirect("https://twitchemotes.com/api_cache/v2/global.json");
+});
 
 // encryption
 var key, algorithm = 'aes-256-ctr';
@@ -70,10 +72,6 @@ function getUserInfo(username, callback) {
 function logMessage(username, message) {
     client.query("INSERT INTO messages (username,message) VALUES($1,$2)", [username, message]);
 }
-
-
-
-
 
 //function returns true if auth is successfully
 //also register the user if he does not exist (likely to change)

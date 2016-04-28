@@ -16,8 +16,7 @@
             if (sessionStorage.getItem('twitchEmotesAPI') === null) {
                 // GET list of Global Emotes from Twitch Emotes API v2
                 $.ajax({
-                    url: 'http://twitchemotes.com/api_cache/v2/global.json',
-                    crossDomain: true,
+                    url: '/kappa',
                     dataType: 'json',
                     success: function(data) {
                         sessionStorage.setItem('twitchEmotesAPI', JSON.stringify(data));
