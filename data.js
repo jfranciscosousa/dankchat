@@ -4,43 +4,6 @@ var postgresAdapter = require('sails-postgresql');
 var waterline = new Waterline();
 var exports = module.exports = {};
 
-var userCollection = Waterline.Collection.extend({
-  identity: 'user',
-  connection: 'default',
-  attributes: {
-    username: {
-      type: 'string',
-      unique: true,
-      required: true
-    },
-    password: {
-      type: 'string',
-      required: true
-    },
-
-    messages: {
-      collection: 'message',
-      via: 'user'
-    }
-  }
-});
-
-var messageCollection = Waterline.Collection.extend({
-  identity: 'message',
-  connection: 'default',
-  attributes: {
-    message: 'string',
-
-    // Add a reference to User
-    user: {
-      model: 'user'
-    }
-  }
-});
-
-waterline.loadCollection(userCollection);
-waterline.loadCollection(messageCollection);
-
 var DB_URL = process.env.DB_URL;
 var config;
 
@@ -49,6 +12,9 @@ if (DB_URL) {
   config = {
     adapters: {
       'postgresql': postgresAdapter
+    },
+    defaults: {
+      migrate: 'safe'
     },
     connections: {
       default: {
@@ -72,6 +38,55 @@ if (DB_URL) {
   };
 }
 
+var userCollection = Waterline.Collection.extend({
+  schema: 'true',
+  identity: 'user_acc',
+  connection: 'default',
+  attributes: {
+    id: {
+      type: 'integer',
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true
+    },
+    username: {
+      type: 'string',
+      unique: true,
+      required: true
+    },
+    password: {
+      type: 'string',
+      required: true
+    },
+
+    messages: {
+      collection: 'message',
+      via: 'user_acc'
+    }
+  }
+});
+
+var messageCollection = Waterline.Collection.extend({
+  schema: 'true',
+  identity: 'message',
+  connection: 'default',
+  attributes: {
+    id: {
+      type: 'integer',
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true
+    },
+    message: 'string',
+    // Add a reference to User
+    user_acc: {
+      model: 'user_acc'
+    }
+  }
+});
+
+waterline.loadCollection(userCollection);
+waterline.loadCollection(messageCollection);
 
 
 waterline.initialize(config, function(err, ontology) {
@@ -79,7 +94,9 @@ waterline.initialize(config, function(err, ontology) {
     return console.error(err);
   }
 
-  var User = ontology.collections.user;
+  console.log("DB Connection INIT");
+
+  var User = ontology.collections.user_acc;
   var Message = ontology.collections.message;
 
   exports.newUser = function(username, password, callback) {
