@@ -23,7 +23,7 @@ app.get("/kappa", function(req, res) {
 // encryption
 var key, algorithm = 'aes-256-ctr';
 
-key = process.env.ENCRYPTION_KEY
+key = process.env.ENCRYPTION_KEY || "DANK_FRESH_MEMES"
 
 function encrypt(text, callback) {
   var cipher = crypto.createCipher(algorithm, key)
