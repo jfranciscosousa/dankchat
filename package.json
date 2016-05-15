@@ -21,6 +21,6 @@
     "jshint": "^2.9.2"
   },
   "scripts": {
-    "start": "node node_modules/gulp/bin/gulp"
+    "start": "gulp"
   }
 }
