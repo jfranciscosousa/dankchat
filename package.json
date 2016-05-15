@@ -13,7 +13,7 @@
     "waterline": "*"
   },
   "scripts": {
-    "start": "node kappachat.js"
+    "start": "node node_modules/gulp/bin/gulp"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
