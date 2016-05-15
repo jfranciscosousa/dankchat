@@ -10,12 +10,7 @@
     "sails-postgresql": "*",
     "socket.io": "*",
     "underscore": "*",
-    "waterline": "*"
-  },
-  "scripts": {
-    "start": "node node_modules/gulp/bin/gulp"
-  },
-  "devDependencies": {
+    "waterline": "*",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-jshint": "^2.0.1",
@@ -24,5 +19,8 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "jshint": "^2.9.2"
+  },
+  "scripts": {
+    "start": "node node_modules/gulp/bin/gulp"
   }
 }
