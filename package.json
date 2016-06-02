@@ -21,6 +21,7 @@
     "jshint": "^2.9.2"
   },
   "scripts": {
+    "gulp": "gulp",
     "start": "gulp"
   }
 }
