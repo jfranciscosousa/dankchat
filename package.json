@@ -25,3 +25,4 @@
   "scripts": {
     "start": "node dankchat.js"
   }
+}
