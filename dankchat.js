@@ -68,6 +68,15 @@ function auth(username, password, callback) {
 var loggedUsers = [];
 
 io.on('connection', function(socket) {
+
+    //send a message through a socket
+    function sendMessage(socket, username, message) {
+        socket.emit('new message', {
+            username: username,
+            message: message
+        });
+    }
+
     socket.on('auth user', function(data) {
         socket.username = data.username;
         //if the user is not logged in (binary search)
@@ -94,10 +103,7 @@ io.on('connection', function(socket) {
                     db.getMessages(function(messages) {
                         for (i in messages) {
                             message = messages[i];
-                            socket.emit('new message', {
-                                username: message.user_acc.username,
-                                message: message.message
-                            });
+                            sendMessage(socket, message.user_acc.username, message.message);
                         }
                     });
                 } //wrong password
@@ -142,10 +148,7 @@ io.on('connection', function(socket) {
             db.newMessage(socket.username, data);
             console.log(socket.username + ": " + data);
             //broadcast the message to other loggedUsers
-            socket.broadcast.emit('new message', {
-                username: socket.username,
-                message: data
-            });
+            sendMessage(socket.broadcast, socket.username, data);
         }
     });
 });
