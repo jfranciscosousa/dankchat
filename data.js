@@ -122,10 +122,16 @@ waterline.initialize(config, function(err, ontology) {
     }).then(function(user) {
       return Message.create({
         message: message,
-        user: user.id
+        user_acc: user
       });
     }).then(function(message) {
       typeof callback === 'function' && callback(message);
+    });
+  }
+
+  exports.getMessages = function(callback){
+    Message.find().populate('user_acc').then(function(messages) {
+      typeof callback === 'function' && callback(messages);
     });
   }
 });
