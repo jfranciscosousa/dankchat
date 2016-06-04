@@ -6,6 +6,7 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var nodemon = require('gulp-nodemon');
+var notify  = require('gulp-notify');
 
 var javascript = ['src/js/jquery-1.11.2.min.js','src/js/**/*.js'];
 var stylesheets = ['src/css/**/*.css'];
