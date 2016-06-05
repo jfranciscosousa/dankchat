@@ -37,3 +37,6 @@ certs
 
 # Encryption Key
 *.key
+
+# Temporary files
+*.tmp

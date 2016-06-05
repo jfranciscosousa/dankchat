@@ -1,12 +1,12 @@
 var Waterline = require('waterline');
-var sailsMemoryAdapter = require('sails-memory');
-var postgresAdapter = require('sails-postgresql');
 var waterline = new Waterline();
-var exports = module.exports = {};
+var sailsDiskAdapter = require('sails-disk');
+var postgresAdapter = require('sails-postgresql');
 
 var DB_URL = process.env.DB_URL;
 var config;
 
+//define our connections config
 if (DB_URL) {
   console.log("DB URL detected, running using POSTGRESQL");
   config = {
@@ -25,19 +25,24 @@ if (DB_URL) {
     }
   };
 } else {
-  console.log("No DB URL env variable detected, running on memory");
+  console.log("No DB URL env variable detected, running using disk storage");
   config = {
     adapters: {
-      'memory': sailsMemoryAdapter
+      'disk': sailsDiskAdapter
+    },
+    defaults: {
+      migrate: 'safe'
     },
     connections: {
       default: {
-        adapter: 'memory'
+        adapter: 'disk'
       }
     }
   };
 }
 
+//user renamed to user_acc because postgres conflict
+//user collection (id,username,password,messages)
 var userCollection = Waterline.Collection.extend({
   schema: 'true',
   identity: 'user_acc',
@@ -66,6 +71,7 @@ var userCollection = Waterline.Collection.extend({
   }
 });
 
+//message collection (id,message,user)
 var messageCollection = Waterline.Collection.extend({
   schema: 'true',
   identity: 'message',
@@ -85,9 +91,14 @@ var messageCollection = Waterline.Collection.extend({
   }
 });
 
+//load the collections
 waterline.loadCollection(userCollection);
 waterline.loadCollection(messageCollection);
 
+
+
+//define our data access facade
+var exports = module.exports = {};
 
 waterline.initialize(config, function(err, ontology) {
   if (err) {

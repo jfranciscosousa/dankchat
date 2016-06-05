@@ -6,7 +6,7 @@
     "autolinker": "^0.26.0",
     "compression": "^1.6.2",
     "express": "^4.13.4",
-    "sails-memory": "^0.10.6",
+    "sails-disk": "^0.10.9",
     "sails-postgresql": "^0.11.4",
     "socket.io": "^1.4.6",
     "underscore": "^1.8.3",
@@ -16,8 +16,8 @@
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.9",
     "gulp-concat": "^2.6.0",
-    "gulp-jshint": "^2.0.1",
     "gulp-nodemon": "^2.0.7",
+    "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.3.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3"
