@@ -14,7 +14,7 @@ if (DB_URL) {
       'postgresql': postgresAdapter
     },
     defaults: {
-      migrate: 'safe'
+      migrate: 'alter'
     },
     connections: {
       default: {
@@ -30,7 +30,7 @@ if (DB_URL) {
       'disk': sailsDiskAdapter
     },
     defaults: {
-      migrate: 'safe'
+      migrate: 'alter'
     },
     connections: {
       default: {
