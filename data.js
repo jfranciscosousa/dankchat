@@ -19,8 +19,7 @@ if (DB_URL) {
     connections: {
       default: {
         adapter: 'postgresql',
-        url: DB_URL,
-        ssl: true
+        url: DB_URL
       }
     }
   };

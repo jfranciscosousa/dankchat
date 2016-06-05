@@ -12,10 +12,12 @@ var db = require("./data.js");
 // web server
 
 app.use(compress());
+
 app.use("/", express.static(__dirname + '/public'));
 http.listen(process.env.PORT || 8080, '0.0.0.0', function() {
     console.log('listening on *:8080');
 });
+
 app.get("/kappa", function(req, res) {
     res.redirect("https://twitchemotes.com/api_cache/v2/global.json");
 });
