@@ -23,6 +23,7 @@
     "gulp-uglify": "^1.5.3"
   },
   "scripts": {
+    "prestart": "npm install",
     "start": "node dankchat.js"
   }
 }
