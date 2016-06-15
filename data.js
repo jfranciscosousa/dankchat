@@ -14,7 +14,7 @@ if (DB_URL) {
       'postgresql': postgresAdapter
     },
     defaults: {
-      migrate: 'alter'
+      migrate: 'safe'
     },
     connections: {
       default: {
