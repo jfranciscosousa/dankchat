@@ -51,7 +51,7 @@ gulp.task('watch', function() {
     gulp.watch(stylesheets, ['build-css']);
 });
 
-gulp.task('server', function() {
+gulp.task('server', ['build-css','build-js','watch'], function() {
     // configure nodemon
     nodemon({
         // the script to run the app
