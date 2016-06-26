@@ -8,7 +8,13 @@ var sourcemaps = require('gulp-sourcemaps');
 var nodemon = require('gulp-nodemon');
 var notify  = require('gulp-notify');
 
-var javascript = ['src/js/jquery-1.11.2.min.js','src/js/**/*.js'];
+var javascript = [
+  'src/lib/jquery/dist/jquery.js',
+  'src/lib/bootstrap/dist/js/bootstrap.js',
+  'src/lib/Autolinker.js/dist/Autolinker.js',
+  'src/lib/socket.io-client/socket.io.js',
+  'src/js/**/*.js'
+];
 var stylesheets = ['src/css/**/*.css'];
 
 /* jshint task would be here */
@@ -42,7 +48,7 @@ gulp.task('server', function() {
         // the script to run the app
         script: 'dankchat.js',
         // this listens to changes in any of these files/routes and restarts the application
-        watch: ["dankchat.js", "data.js", 'public/*', 'public/*/**'],
+        watch: ["dankchat.js", "data.js", 'src/*'],
         ext: 'js'
     }).on('restart', () => {
         gulp.src('server.js')

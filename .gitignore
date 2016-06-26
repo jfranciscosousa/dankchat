@@ -40,3 +40,5 @@ certs
 
 # Temporary files
 *.tmp
+
+src/lib/
