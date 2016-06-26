@@ -6,27 +6,36 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var nodemon = require('gulp-nodemon');
-var notify  = require('gulp-notify');
+var notify = require('gulp-notify');
+var bower = require('gulp-bower');
 
 var javascript = [
-  'src/lib/jquery/dist/jquery.js',
-  'src/lib/bootstrap/dist/js/bootstrap.js',
-  'src/lib/Autolinker.js/dist/Autolinker.js',
-  'src/lib/socket.io-client/socket.io.js',
-  'src/js/**/*.js'
+    'src/lib/jquery/dist/jquery.js',
+    'src/lib/bootstrap/dist/js/bootstrap.js',
+    'src/lib/Autolinker.js/dist/Autolinker.js',
+    'src/lib/socket.io-client/socket.io.js',
+    'src/js/**/*.js'
 ];
-var stylesheets = ['src/css/**/*.css'];
+var stylesheets = [
+  'src/lib/bootstrap/dist/css/bootstrap.css',
+  'src/lib/bootstrap/dist/css/bootstrap-theme.css',
+  'src/css/**/*.css'
+];
+
+gulp.task('bower', function() {
+    return bower();
+});
 
 /* jshint task would be here */
 
-gulp.task('build-css', function() {
+gulp.task('build-css', ['bower'], function() {
     return gulp.src(stylesheets)
         .pipe(concat('app.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('public/assets/stylesheets'));
 });
 
-gulp.task('build-js', function() {
+gulp.task('build-js', ['bower'], function() {
     return gulp.src(javascript)
         .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
