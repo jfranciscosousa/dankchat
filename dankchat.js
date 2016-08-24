@@ -6,7 +6,6 @@ var io = require('socket.io')(http);
 var autolinker = require('autolinker');
 var _ = require('underscore');
 var compress = require('compression');
-var crypto = require('crypto');
 var db = require("./data.js");
 
 // web server
@@ -22,18 +21,6 @@ app.get("/kappa", function(req, res) {
     res.redirect("https://twitchemotes.com/api_cache/v2/global.json");
 });
 
-// encryption
-var key, algorithm = 'aes-256-ctr';
-
-key = process.env.ENCRYPTION_KEY || "DANK_FRESH_MEMES"
-
-function encrypt(text, callback) {
-    var cipher = crypto.createCipher(algorithm, key)
-    var crypted = cipher.update(text, 'utf8', 'hex')
-    crypted += cipher.final('hex');
-    callback(crypted);
-}
-
 //function returns true if auth is successfully
 //also register the user if he does not exist (likely to change)
 function auth(username, password, callback) {
@@ -44,25 +31,23 @@ function auth(username, password, callback) {
         callback(res, reason);
         return;
     }
-    password = encrypt(password, function(password) {
-        db.getUser(username, function(user) {
-            //if user is registered
-            if (user) {
-                //match password
-                if (user.password == password) {
-                    reason = 'Password matches!'
-                    res = true;
-                } else {
-                    res = false;
-                    reason = 'Wrong password!';
-                }
-            } else {
-                db.newUser(username, password);
-                reason = 'New user!';
+    db.getUser(username, function(user) {
+        //if user is registered
+        if (user) {
+            //match password
+            if (user.password == password) {
+                reason = 'Password matches!'
                 res = true;
+            } else {
+                res = false;
+                reason = 'Wrong password!';
             }
-            callback(res, reason);
-        });
+        } else {
+            db.newUser(username, password);
+            reason = 'New user!';
+            res = true;
+        }
+        callback(res, reason);
     });
 }
 // chatroom
