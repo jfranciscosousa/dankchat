@@ -1,31 +1,31 @@
 {
-  "name": "DankChat",
-  "version": "0.0.1",
-  "description": "The Dankest Chat Room for Dank Memers",
-  "dependencies": {
-    "autolinker": "^0.26.0",
-    "bower": "^1.7.9",
-    "compression": "^1.6.2",
-    "express": "^4.13.4",
-    "sails-disk": "^0.10.9",
-    "sails-postgresql": "^0.11.4",
-    "socket.io": "^1.4.8",
-    "underscore": "^1.8.3",
-    "waterline": "^0.12.1"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-bower": "0.0.13",
-    "gulp-clean-css": "^2.0.9",
-    "gulp-concat": "^2.6.0",
-    "gulp-nodemon": "^2.0.7",
-    "gulp-notify": "^2.2.0",
-    "gulp-sass": "^2.3.1",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3"
-  },
-  "scripts": {
-    "prestart": "npm install",
-    "start": "node dankchat.js"
-  }
+    "name": "DankChat",
+    "version": "0.0.1",
+    "description": "The Dankest Chat Room for Dank Memers",
+    "dependencies": {
+        "autolinker": "^0.28.0",
+        "bower": "^1.7.9",
+        "compression": "^1.6.2",
+        "express": "^4.13.4",
+        "sails-disk": "^0.10.9",
+        "sails-postgresql": "^0.11.4",
+        "socket.io": "^1.4.8",
+        "underscore": "^1.8.3",
+        "waterline": "^0.12.1"
+    },
+    "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-bower": "^0.0.13",
+        "gulp-clean-css": "^2.0.9",
+        "gulp-concat": "^2.6.0",
+        "gulp-nodemon": "^2.0.7",
+        "gulp-notify": "^2.2.0",
+        "gulp-sass": "^2.3.1",
+        "gulp-sourcemaps": "^1.6.0",
+        "gulp-uglify": "^2.0.0"
+    },
+    "scripts": {
+        "prestart": "npm install",
+        "start": "node dankchat.js"
+    }
 }

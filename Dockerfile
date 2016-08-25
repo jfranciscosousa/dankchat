@@ -1,10 +1,7 @@
-FROM ubuntu:16.04
+FROM node:4-onbuild
 
-RUN apt-get update && apt-get install -y curl git
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
-RUN apt-get install -y nodejs
-RUN git clone https://github.com/zeesousa/dankchat
-WORKDIR "dankchat"
+ADD . .
+
 RUN npm install
 
 CMD ["npm", "start"]
