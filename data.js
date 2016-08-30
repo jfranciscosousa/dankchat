@@ -4,8 +4,13 @@ var sailsDiskAdapter = require('sails-disk');
 var postgresAdapter = require('sails-postgresql');
 var crypto = require('crypto');
 
-var DB_URL = process.env.DB_URL;
-var config;
+var DB_URL = process.env.DATABASE_URL;
+var config, migrate;
+
+if (process.env.NODE_ENV == "production")
+    migrate = "safe"
+else
+    migrate = "alter"
 
 //define our connections config
 if (DB_URL) {
@@ -15,7 +20,7 @@ if (DB_URL) {
             'postgresql': postgresAdapter
         },
         defaults: {
-            migrate: 'alter'
+            migrate: migrate
         },
         connections: {
             default: {
