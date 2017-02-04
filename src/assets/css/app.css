@@ -35,7 +35,7 @@ ul {
 .login.page {
   background-size: cover;
   background-color: #000;
-  background-image: url("/assets/images/rarepepe.jpg");
+  background-image: url("/images/rarepepe.jpg");
 }
 .login.page .form {
   height: 100px;
