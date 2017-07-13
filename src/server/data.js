@@ -107,18 +107,16 @@ var exports = module.exports = {};
 var algorithm = "aes-256-ctr";
 var key = process.env.ENCRYPTION_KEY || "DANK_FRESH_MEMES";
 
-function encrypt(text, callback) {
+function encrypt(text) {
   var cipher = crypto.createCipher(algorithm, key);
   var crypted = cipher.update(text, "utf8", "hex");
-  crypted += cipher.final("hex");
-  callback(crypted);
+  return crypted + cipher.final("hex");
 }
 
-function decrypt(text, callback) {
+function decrypt(text) {
   var decipher = crypto.createDecipher(algorithm, key);
   var decrypted = decipher.update(text, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-  callback(decrypted);
+  return decrypted + decipher.final("utf8");
 }
 
 waterline.initialize(config, function (err, ontology) {
@@ -126,53 +124,45 @@ waterline.initialize(config, function (err, ontology) {
     return console.error(err);
   }
 
-  console.log("DB Connection INIT");
+  console.log("Initialized DB connection");
 
   var User = ontology.collections.user_acc;
   var Message = ontology.collections.message;
 
-  exports.newUser = function (username, password, callback) {
-    encrypt(password, function (enc_password) {
-      User.create({
-        username: username,
-        password: enc_password
-      }).then(function (user) {
-        typeof callback === "function" && callback(user);
-      });
+  exports.newUser = function (username, password) {
+    let enc_password = encrypt(password);
+
+    return User.create({
+      username: username,
+      password: enc_password
     });
   };
 
-  exports.getUser = function (username, callback) {
-    User.findOne({
+  exports.getUser = async function (username) {
+    let user = await User.findOne({
       username: username
-    }).then(function (user) {
-      if (user) {
-        decrypt(user.password, function (dec_password) {
-          user.password = dec_password;
-          typeof callback === "function" && callback(user);
-        });
-      } else {
-        typeof callback === "function" && callback(user);
-      }
-    });
+    })
+
+    if (user) {
+      user.password = decrypt(user.password);
+    }
+
+    return user;
   };
 
-  exports.newMessage = function (username, message, callback) {
-    User.findOne({
+  exports.newMessage = async function (username, message) {
+    let user = await User.findOne({
       username: username
-    }).then(function (user) {
-      return Message.create({
-        message: message,
-        user_acc: user
-      });
-    }).then(function (message) {
-      typeof callback === "function" && callback(message);
+    })
+
+    return Message.create({
+      message: message,
+      user_acc: user
     });
   };
 
-  exports.getMessages = function (callback) {
-    Message.find().populate("user_acc").then(function (messages) {
-      typeof callback === "function" && callback(messages);
-    });
+  exports.getMessages = async function () {
+    let messages = await Message.find().populate("user_acc");
+    return messages;
   };
 });

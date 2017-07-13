@@ -22,35 +22,35 @@ app.get("/kappa", function (req, res) {
 
 //function returns true if auth is successfully
 //also register the user if he does not exist (likely to change)
-function auth(username, password, callback) {
-  var reason, res;
+async function authenticate(username, password) {
+  let response = {};
   if (password.length < 6) {
-    reason = "Password is too short!";
-    res = false;
-    callback(res, reason);
-    return;
+    response.reason = "Password is too short!";
+    response.status = false;
+    return response;
   }
-  db.getUser(username, function (user) {
-    //if user is registered
-    if (user) {
-      //match password
-      if (user.password == password) {
-        reason = "Password matches!";
-        res = true;
-      } else {
-        res = false;
-        reason = "Wrong password!";
-      }
-    } else {
-      db.newUser(username, password);
-      reason = "New user!";
-      res = true;
-    }
-    callback(res, reason);
-  });
-}
-// chatroom
 
+  let user = await db.getUser(username)
+
+  //if user is registered
+  if (user) {
+    //match password
+    if (user.password == password) {
+      response.reason = "Password matches!";
+      response.status = true;
+    } else {
+      response.reason = false;
+      response.status = "Wrong password!";
+    }
+  } else {
+    await db.newUser(username, password);
+    response.reason = "New user!";
+    response.status = true;
+  }
+  return response;
+}
+
+// chatroom
 var loggedUsers = [];
 
 io.on("connection", function (socket) {
@@ -63,46 +63,53 @@ io.on("connection", function (socket) {
     });
   }
 
-  socket.on("auth user", function (data) {
-    socket.username = data.username;
-    //if the user is not logged in (binary search)
-    if (_.indexOf(loggedUsers, data.username, true) == -1) {
-      //authenticate user
-      auth(data.username, data.password, function (authenticated, reason) {
-        if (authenticated) {
+  socket.on("auth user", async function (data) {
+    try {
+      socket.username = data.username;
+      //if the user is not logged in (binary search)
+      if (_.indexOf(loggedUsers, data.username, true) == -1) {
+        //authenticate user
+        let auth = await authenticate(data.username, data.password);
+
+        if (auth.status) {
           //determine the sorted index (mantain the array sorted)
           var index = _.sortedIndex(loggedUsers, data.username);
           //insert the element at the index
           loggedUsers.splice(index, 0, data.username);
           var numUsers = _.size(loggedUsers);
+
           //tell the clients a new user joined
           socket.broadcast.emit("user joined", {
             username: socket.username,
             numUsers: numUsers
           });
-          //tel the user he successfully logged in
+
+          //tell the user he successfully logged in
           socket.emit("login", {
             numUsers: numUsers,
             loggedUsers: loggedUsers
           });
+
           //give him past messages
-          db.getMessages(function (messages) {
-            messages.forEach((message) => {
-              sendMessage(socket, message.user_acc.username, message.message);
-            });
+          let messages = await db.getMessages();
+
+          messages.forEach((message) => {
+            sendMessage(socket, message.user_acc.username, message.message);
           });
         } //wrong password
         else {
           socket.emit("login-fail", {
-            reason: reason
+            reason: auth.reason
           });
         }
-      });
-    }
-    // if the username is already in use
-    else {
-      //tel the client that the login failed
-      socket.emit("login-fail");
+      }
+      // if the username is already in use
+      else {
+        //tel the client that the login failed
+        socket.emit("login-fail");
+      }
+    } catch (error) {
+      console.trace(error)
     }
   });
 
@@ -120,9 +127,8 @@ io.on("connection", function (socket) {
   });
 
   //on new message event
-  socket.on("new message", function (data) {
+  socket.on("new message", async function (data) {
     //test the message for markup
-
     if (/<[a-z][\s\S]*>/i.test(data)) {
       console.log("markup detected, ignored the message");
     } else {
@@ -130,10 +136,10 @@ io.on("connection", function (socket) {
         className: "myLink"
       });
       //log the message
-      db.newMessage(socket.username, data);
+      await db.newMessage(socket.username, data);
       console.log(socket.username + ": " + data);
       //broadcast the message to other loggedUsers
-      sendMessage(socket.broadcast, socket.username, data);
+      await sendMessage(socket.broadcast, socket.username, data);
     }
   });
 });
