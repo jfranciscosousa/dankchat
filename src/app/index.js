@@ -1,22 +1,22 @@
-import Vue from 'vue'
-import VueRouter from "vue-router"
-import Vuex from "vuex"
-import App from "./components/App"
-import Login from "./components/Login"
-import Chat from "./components/Chat"
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Vuex from "vuex";
+import App from "./components/App";
+import Login from "./components/Login";
+import Chat from "./components/Chat";
 
-Vue.use(VueRouter)
-Vue.use(Vuex)
+Vue.use(VueRouter);
+Vue.use(Vuex);
 
 const routes = [
-  { path: '*', redirect: '/login' },
-  { path: '/login', component: Login, name: "login" },
-  { path: '/chat', component: Chat, name: "chat" }
-]
+  { path: "*", redirect: "/login" },
+  { path: "/login", component: Login, name: "login" },
+  { path: "/chat", component: Chat, name: "chat" }
+];
 
 const router = new VueRouter({
   routes // short for `routes: routes`
-})
+});
 
 const users = new Array();
 
@@ -35,11 +35,11 @@ const store = new Vuex.Store({
       }
     }
   },
-})
+});
 
 new Vue({
-  el: '#app',
+  el: "#app",
   router,
   store,
   render: h => h(App)
-})
+});

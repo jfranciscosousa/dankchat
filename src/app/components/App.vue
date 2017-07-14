@@ -18,14 +18,15 @@ export default {
         username: user.username,
         password: user.password
       });
-
-      socket.on("login", (data) => {
-        data.loggedUsers.forEach((user) => {
-          this.$store.commit("addUser", user)
-        });
-        this.$router.replace("chat");
-      });
     }
+
+    socket.on("login", (data) => {
+      this.$router.replace("/chat");
+
+      data.loggedUsers.forEach((user) => {
+        this.$store.commit("addUser", user)
+      });
+    });
   }
 }
 </script>

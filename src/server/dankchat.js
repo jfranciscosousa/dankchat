@@ -5,7 +5,7 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const autolinker = require("autolinker");
 const compress = require("compression");
-const db = require("./data.js");
+const db = require("./db/data.js");
 
 // web server
 

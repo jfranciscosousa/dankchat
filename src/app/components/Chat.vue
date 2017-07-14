@@ -71,7 +71,7 @@ export default {
   },
   updated() {
     var elem = this.$el.querySelector(".messages");
-    elem.scrollTop = elem.clientHeight;
+    elem.scrollTop = elem.scrollHeight;
   },
 }
 

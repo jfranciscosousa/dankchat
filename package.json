@@ -24,6 +24,7 @@
     "eslint": "^3.15.0"
   },
   "scripts": {
+    "migrate": "node src/tools/migrate.js",
     "postinstall": "node_modules/.bin/poi build src/app/index.js",
     "start": "node src/server/dankchat.js"
   }

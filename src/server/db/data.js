@@ -1,100 +1,25 @@
 var Waterline = require("waterline");
 var waterline = new Waterline();
-var sailsDiskAdapter = require("sails-disk");
-var postgresAdapter = require("sails-postgresql");
 var crypto = require("crypto");
 
 var DB_URL = process.env.DATABASE_URL;
-var config, migrate;
-
-if (process.env.NODE_ENV == "production")
-  migrate = "safe";
-else
-  migrate = "alter";
+var config;
 
 //define our connections config
 if (DB_URL) {
   console.log("DB URL detected, running using POSTGRESQL");
-  config = {
-    adapters: {
-      "postgresql": postgresAdapter
-    },
-    defaults: {
-      migrate: migrate
-    },
-    connections: {
-      default: {
-        adapter: "postgresql",
-        url: DB_URL
-      }
-    }
-  };
+  config = require("./config/postgres").default;
 } else {
   console.log("No DB URL env variable detected, running using disk storage");
-  config = {
-    adapters: {
-      "disk": sailsDiskAdapter
-    },
-    defaults: {
-      migrate: "alter"
-    },
-    connections: {
-      default: {
-        adapter: "disk"
-      }
-    }
-  };
+  config = require("./config/disk").default;
 }
 
 //user renamed to user_acc because postgres conflict
 //user collection (id,username,password,messages)
-var userCollection = Waterline.Collection.extend({
-  schema: "true",
-  identity: "user_acc",
-  connection: "default",
-  attributes: {
-    id: {
-      type: "integer",
-      autoIncrement: true,
-      primaryKey: true,
-      unique: true
-    },
-    username: {
-      type: "string",
-      unique: true,
-      required: true
-    },
-    password: {
-      type: "string",
-      required: true
-    },
-
-    messages: {
-      collection: "message",
-      via: "user_acc"
-    }
-  }
-});
+var userCollection = require("./models/user").default;
 
 //message collection (id,message,user)
-var messageCollection = Waterline.Collection.extend({
-  schema: "true",
-  identity: "message",
-  connection: "default",
-  attributes: {
-    id: {
-      type: "integer",
-      autoIncrement: true,
-      primaryKey: true,
-      unique: true
-    },
-    message: "string",
-    // Add a reference to User
-    user_acc: {
-      model: "user_acc"
-    }
-  }
-});
+var messageCollection = require("./models/message").default;
 
 //load the collections
 waterline.loadCollection(userCollection);
@@ -141,7 +66,7 @@ waterline.initialize(config, function (err, ontology) {
   exports.getUser = async function (username) {
     let user = await User.findOne({
       username: username
-    })
+    });
 
     if (user) {
       user.password = decrypt(user.password);
@@ -153,7 +78,7 @@ waterline.initialize(config, function (err, ontology) {
   exports.newMessage = async function (username, message) {
     let user = await User.findOne({
       username: username
-    })
+    });
 
     return Message.create({
       message: message,
