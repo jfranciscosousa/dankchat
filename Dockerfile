@@ -3,6 +3,6 @@ FROM node:4-onbuild
 ADD . .
 
 RUN npm install
-RUN gulp
+RUN poi build
 
 CMD ["npm", "start"]
