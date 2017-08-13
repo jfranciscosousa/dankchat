@@ -1,19 +1,3 @@
-<template>
-  <div id="chat" class="chat page">
-    <audio id="notif" src="./assets/sounds/notif.mp3" preload="auto" />
-    <div class="chatArea">
-      <ul class="messages">
-        <li class="message" v-for="message in messages" v-bind:key="message.id">
-          <span class="username" v-bind:style="{ color: message.color }">[{{message.date}}] {{message.username}} :</span>
-          <div class="messageBody">{{message.message}}</div>
-        </li>
-      </ul>
-      <users id="userList" class="userList"></users>
-    </div>
-    <input v-model="inputMessage" v-on:keyup.enter="onSubmit" id="inputMessage" class="inputMessage" placeholder="Type here..." />
-  </div>
-</template>
-
 <script>
 import socket from "../socket"
 import Users from './Users';
@@ -50,27 +34,17 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (this.inputMessage != "")
-        socket.emit("new message", this.inputMessage);
+      if (this.inputMessage != "") socket.emit("new message", this.inputMessage);
     },
     addMessage(message) {
-      let d = new Date();
-      let options = {
-        hour: "2-digit",
-        minute: "2-digit"
-      };
-      message.date = d.toLocaleTimeString("pt-PT", options);
+      message.date = getDate();
       message.color = getColor(message.username);
-      this.playSound();
+      playSound();
       this.messages.push(message);
-    },
-    playSound() {
-      let notif = document.getElementById("notif");
-      if (playNotif) notif.play();
     }
   },
   updated() {
-    var elem = this.$el.querySelector(".messages");
+    var elem = this.$el.querySelector(".Chat-messages");
     elem.scrollTop = elem.scrollHeight;
   },
 }
@@ -87,28 +61,56 @@ function getColor(str) {
   }
   return colour;
 }
+
+function getDate() {
+  let date = new Date();
+  let options = {
+    hour: "2-digit",
+    minute: "2-digit"
+  };
+
+  return date.toLocaleTimeString("pt-PT", options);
+}
+
+function playSound() {
+  let notif = document.getElementById("notif");
+  if (playNotif) notif.play();
+}
 </script>
 
-<style>
-* {
-  box-sizing: border-box;
+<template>
+  <div id="chat" class="container-fluid p-0 m-0 Chat-page">
+    <audio id="notif" src="./assets/sounds/notif.mp3" preload="auto" />
+    <div class="row Chat-chatArea">
+      <ul class="col-9 Chat-messages">
+        <li v-for="message in messages" v-bind:key="message.id">
+          <div class="row">
+            <span class="Chat-username" v-bind:style="{ color: message.color }">[{{message.date}}] {{message.username}} :</span>
+            <div class="Chat-messageBody">{{message.message}}</div>
+          </div>
+        </li>
+      </ul>
+      <users class="col-3 Chat-users"></users>
+    </div>
+    <input v-model="inputMessage" v-on:keyup.enter="onSubmit" class="Chat-inputMessage" placeholder="Type here..." />
+  </div>
+</template>
+
+<style lang="scss">
+$inputHeight: 60px;
+
+.row {
+  margin: 0px;
+  padding: 0px;
 }
 
-html {
-  font-weight: 300;
-  -webkit-font-smoothing: antialiased;
+[class*='col-'] {
+  margin: 0px;
+  padding: 0px;
 }
 
-html,
-input {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+.Chat-page {
+  height: 100vh;
 }
 
 ul {
@@ -116,67 +118,45 @@ ul {
   word-wrap: break-word;
 }
 
-.page {
-  height: 100%;
-  position: absolute;
-  width: 100%;
+.Chat-chatArea {
+  height: calc(100vh - #{$inputHeight})
 }
 
-.messages {
-  font-size: 150%;
+.Chat-users {
+  overflow-y: scroll;
 }
 
-.inputMessage {
-  font-size: 100%;
-}
-
-.log {
+.Chat-log {
   color: gray;
   font-size: 70%;
   margin: 5px;
   text-align: center;
 }
 
-.message {
-  height: auto;
-  position: relative;
-  display: list-item;
-}
-
-.chatArea {
-  height: 100%;
-  padding-bottom: 60px;
-}
-
-.messages {
+.Chat-messages {
   height: 100%;
   width: 80%;
   float: left;
+  font-size: 150%;
   overflow-y: scroll;
   padding: 10px 20px 10px 20px;
 }
 
-.userList {
+.Chat-users {
   height: 100%;
   width: 20%;
   display: inline-block;
   *display: inline;
   zoom: 1;
-  float: right;
   font-size: 150%;
   overflow-y: scroll;
 }
 
-.message.typing .messageBody {
-  color: gray;
-}
-
-.messageBody {
+.Chat-messageBody {
   line-height: 50px;
 }
 
-.username {
-  float: left;
+.Chat-username {
   font-weight: 700;
   overflow: hidden;
   padding-right: 15px;
@@ -185,14 +165,13 @@ ul {
   line-height: 50px;
 }
 
-.inputMessage {
+.Chat-inputMessage {
   border: 10px solid #000;
   bottom: 0;
-  height: 60px;
+  height: $inputHeight;
   left: 0;
   outline: none;
   padding-left: 10px;
-  position: absolute;
   right: 0;
   width: 100%;
 }
