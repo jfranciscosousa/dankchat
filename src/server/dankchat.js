@@ -32,9 +32,7 @@ async function authenticate(username, password) {
 
   let user = await db.getUser(username);
 
-  //if user is registered
   if (user) {
-    //match password
     if (user.password == password) {
       response.reason = "Password matches!";
       response.status = true;
@@ -47,6 +45,7 @@ async function authenticate(username, password) {
     response.reason = "New user!";
     response.status = true;
   }
+
   return response;
 }
 
@@ -54,59 +53,16 @@ async function authenticate(username, password) {
 var loggedUsers = new Set();
 
 io.on("connection", function (socket) {
-
-  //send a message through a socket
-  function sendMessage(socket, username, message) {
-    socket.emit("new message", {
-      username: username,
-      message: message
-    });
-  }
-
   socket.on("auth user", async function (data) {
-    
     try {
       socket.username = data.username;
-      //if the user is not logged in (binary search)
-      if (!loggedUsers.has(data.username)) {
-        //authenticate user
-        let auth = await authenticate(data.username, data.password);
 
-        if (auth.status) {
-          loggedUsers.add(data.username);
-          var numUsers = loggedUsers.size;
-          console.log(loggedUsers);
+      if (isUserAlreadyLogged(data.username)) return socket.emit("login-fail", { reason: "Already logged in" });
 
-          //tell the clients a new user joined
-          socket.broadcast.emit("user joined", {
-            username: socket.username,
-            numUsers: numUsers
-          });
+      let auth = await authenticate(data.username, data.password);
 
-          //tell the user he successfully logged in
-          socket.emit("login", {
-            numUsers: numUsers,
-            loggedUsers: Array.from(loggedUsers)
-          });
-
-          //give him past messages
-          let messages = await db.getMessages();
-
-          messages.forEach((message) => {
-            sendMessage(socket, message.user_acc.username, message.message);
-          });
-        } //wrong password
-        else {
-          socket.emit("login-fail", {
-            reason: auth.reason
-          });
-        }
-      }
-      // if the username is already in use
-      else {
-        //tel the client that the login failed
-        socket.emit("login-fail");
-      }
+      if (auth.status) handleUserLogin(socket, data);
+      else return socket.emit("login-fail", { reason: auth.reason });
     } catch (error) {
       console.trace(error);
     }
@@ -138,9 +94,46 @@ io.on("connection", function (socket) {
       await db.newMessage(socket.username, data);
       console.log(socket.username + ": " + data);
       //broadcast the message to other loggedUsers
-      await sendMessage(socket.broadcast, socket.username, data);
+      sendMessage(socket.broadcast, socket.username, data);
 
       socket.emit("message broadcasted", { username: socket.username, message: data });
     }
   });
 });
+
+function isUserAlreadyLogged(username) {
+  return loggedUsers.has(username);
+}
+
+//send a message through a socket
+function sendMessage(socket, username, message) {
+  socket.emit("new message", {
+    username: username,
+    message: message
+  });
+}
+
+function handleUserLogin(socket, userData) {
+  loggedUsers.add(userData.username);
+
+  //tell the clients a new user joined
+  socket.broadcast.emit("user joined", {
+    username: socket.username
+  });
+
+  //tell the user he successfully logged in
+  socket.emit("login", {
+    loggedUsers: Array.from(loggedUsers)
+  });
+
+  //give him past messages
+  sendMessageHistory(socket);
+}
+
+async function sendMessageHistory(socket) {
+  let messages = await db.getMessages();
+
+  messages.forEach((message) => {
+    sendMessage(socket, message.user_acc.username, message.message);
+  });
+}

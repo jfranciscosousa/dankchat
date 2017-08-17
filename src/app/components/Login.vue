@@ -31,6 +31,9 @@ export default {
         });
       }
     }
+  },
+  beforeMount(){
+    socket.on("login-fail", data => console.log(data.reason));
   }
 }
 
