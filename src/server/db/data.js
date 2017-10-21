@@ -80,14 +80,17 @@ waterline.initialize(config, function (err, ontology) {
       username: username
     });
 
-    return Message.create({
+    message = Object.assign(await Message.create({
       message: message,
       user_acc: user
-    });
+    }), { user_acc: user });
+
+    return message;
   };
 
   exports.getMessages = async function () {
     let messages = await Message.find().populate("user_acc");
+
     return messages;
   };
 });

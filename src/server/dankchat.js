@@ -17,7 +17,11 @@ http.listen(process.env.PORT || 8080, "0.0.0.0", function () {
 });
 
 app.get("/kappa", function (req, res) {
-  res.redirect("https://twitchemotes.com/api_cache/v2/global.json");
+  res.redirect("https://twitchemotes.com/api_cache/v3/global.json");
+});
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "/../../dist/index.html"));
 });
 
 //function returns true if auth is successfully
@@ -91,12 +95,12 @@ io.on("connection", function (socket) {
         className: "myLink"
       });
       //log the message
-      await db.newMessage(socket.username, data);
+      let message = await db.newMessage(socket.username, data);
       console.log(socket.username + ": " + data);
       //broadcast the message to other loggedUsers
-      sendMessage(socket.broadcast, socket.username, data);
+      sendMessage(socket.broadcast, message);
 
-      socket.emit("message broadcasted", { username: socket.username, message: data });
+      socket.emit("message broadcasted", message);
     }
   });
 });
@@ -106,14 +110,11 @@ function isUserAlreadyLogged(username) {
 }
 
 //send a message through a socket
-function sendMessage(socket, username, message) {
-  socket.emit("new message", {
-    username: username,
-    message: message
-  });
+function sendMessage(socket, message) {
+  socket.emit("new message", message);
 }
 
-function handleUserLogin(socket, userData) {
+async function handleUserLogin(socket, userData) {
   loggedUsers.add(userData.username);
 
   //tell the clients a new user joined
@@ -121,19 +122,11 @@ function handleUserLogin(socket, userData) {
     username: socket.username
   });
 
-  //tell the user he successfully logged in
-  socket.emit("login", {
-    loggedUsers: Array.from(loggedUsers)
-  });
-
-  //give him past messages
-  sendMessageHistory(socket);
-}
-
-async function sendMessageHistory(socket) {
   let messages = await db.getMessages();
 
-  messages.forEach((message) => {
-    sendMessage(socket, message.user_acc.username, message.message);
+  //tell the user he successfully logged in
+  socket.emit("login", {
+    loggedUsers: Array.from(loggedUsers),
+    messages: messages,
   });
 }

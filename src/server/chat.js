@@ -4,4 +4,4 @@ exports.sendMessage = (socket, username, message) => {
     username: username,
     message: message
   });
-}
+};
