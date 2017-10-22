@@ -10,7 +10,8 @@ export default class Login extends React.Component {
 
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      errorMessage: ""
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -18,7 +19,14 @@ export default class Login extends React.Component {
   }
 
   componentWillMount() {
-    socket.on("login-fail", data => console.log(data.reason));
+    socket.on("login-fail", data => this.setState({ errorMessage: data.reason }));
+
+    socket.on("login", () => {
+      localStorage.setItem("user", JSON.stringify({
+        username: this.state.username,
+        password: this.state.password
+      }));
+    });
   }
 
   handleInputChange(event) {
@@ -33,11 +41,6 @@ export default class Login extends React.Component {
 
   submit(event) {
     if (event.key === "Enter" && this.state.username != "") {
-      localStorage.setItem("user", JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      }));
-
       socket.emit("auth user", {
         username: this.state.username.trim(),
         password: this.state.password
@@ -51,7 +54,7 @@ export default class Login extends React.Component {
             <input name="username" className="Login-page-input" type="text" maxLength="14" value={this.state.username} onChange={this.handleInputChange} />
             <h3 className="Login-page-label">DankPass</h3>
             <input name="password" type="password" className="Login-page-input" maxLength="14" value={this.state.password} onChange={this.handleInputChange} />
-            <h3 id="errorMessage" className="Login-page-label" />
+            <h3 className="Login-page-label">{this.state.errorMessage}</h3>
           </form>;
   }
 }

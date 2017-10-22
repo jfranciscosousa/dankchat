@@ -8,13 +8,12 @@ export default class ChatMessage extends React.Component {
     super(props);
 
     this.message = props.message;
+    this.renderUser = props.renderUser;
   }
 
   render() {
     return <li key={ this.message.id }>
-            <span className="Chat-message-username" style={ { color: getColor(this.message) } }>
-              [{ getShortDate(this.message.createdAt) }] { this.message.user_acc.username }
-            </span>
+            <Username message={this.message} renderUser={this.renderUser}></Username>
             <div className="Chat-message-body">
               { this.message.message }
             </div>
@@ -23,7 +22,22 @@ export default class ChatMessage extends React.Component {
 }
 
 ChatMessage.propTypes = {
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  renderUser: PropTypes.bool.isRequired
+};
+
+function Username(props) {
+  if (props.renderUser)
+    return <span className="Chat-message-username" style={ { color: getColor(props.message) } }>
+      [{ getShortDate(props.message.createdAt) }] { props.message.user_acc.username }
+    </span>;
+  else
+    return null;
+}
+
+Username.propTypes = {
+  message: PropTypes.object.isRequired,
+  renderUser: PropTypes.bool.isRequired
 };
 
 function getColor(message) {

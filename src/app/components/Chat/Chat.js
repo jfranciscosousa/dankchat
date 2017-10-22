@@ -71,6 +71,8 @@ export default class Chat extends React.Component {
   }
 
   render() {
+    let previousUser;
+
     return <div id="chat" className="Chat-page">
       <div className="Chat-nav">
         <a className="Chat-nav-logout" onClick={this.props.logoutCallback}>Logout</a>
@@ -80,9 +82,11 @@ export default class Chat extends React.Component {
 
       <div className="Chat-chatArea">
         <ul className="Chat-messages" ref={(el) => this.chatMessagesEl = el}>
-          {this.state.messages.map((message) => (
-            <ChatMessage message={message} key={message.id}/>
-          ))}
+          {this.state.messages.map((message) => {
+            let renderUser = message.user_acc.username != previousUser;
+            previousUser = message.user_acc.username;
+            return <ChatMessage message={message} renderUser={renderUser} key={message.id}/>;
+          })}
         </ul>
         <Users users={this.props.users} className="Chat-users"></Users>
       </div>

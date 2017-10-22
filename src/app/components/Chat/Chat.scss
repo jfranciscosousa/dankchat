@@ -3,7 +3,7 @@
 }
 
 .Chat-nav {
-  height: 5%;
+  height: 10%;
   background-color: black;
   color: white;
   display: flex;
@@ -18,7 +18,7 @@
 }
 
 .Chat-chatArea {
-  height: calc(95% - 60px);
+  height: calc(90% - 60px);
   display: flex;
   ul {
     list-style: none;
