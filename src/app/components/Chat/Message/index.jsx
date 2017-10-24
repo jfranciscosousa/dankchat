@@ -3,27 +3,18 @@ import PropTypes from "prop-types";
 
 import "./index.scss";
 
-export default class ChatMessage extends React.Component {
-  static propTypes = {
-    message: PropTypes.object.isRequired,
-    renderUser: PropTypes.bool.isRequired
-  };
+ChatMessage.propTypes = {
+  message: PropTypes.object.isRequired,
+  renderUser: PropTypes.bool.isRequired
+};
 
-  constructor(props) {
-    super(props);
-
-    this.message = props.message;
-    this.renderUser = props.renderUser;
-  }
-
-  render() {
-    return (
-      <li key={this.message.id}>
-        <Username message={this.message} renderUser={this.renderUser} />
-        <div className="Chat-message-body">{this.message.message}</div>
-      </li>
-    );
-  }
+export default function ChatMessage(props) {
+  return (
+    <li key={props.message.id}>
+      <Username message={props.message} renderUser={props.renderUser} />
+      <div className="Chat-message-body">{props.message.message}</div>
+    </li>
+  );
 }
 
 Username.propTypes = {

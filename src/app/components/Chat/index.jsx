@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import socket from "../../socket";
 import Users from "../Users";
 import AudioNotification from "../AudioNotification";
-import ChatMessage from "./Message";
+import Messages from "./Messages";
 
 import "./index.scss";
 
@@ -38,14 +38,6 @@ export default class Chat extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.scrollDown();
-  }
-
-  componentDidUpdate() {
-    this.scrollDown();
-  }
-
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -71,13 +63,7 @@ export default class Chat extends React.Component {
     });
   }
 
-  scrollDown() {
-    this.chatMessagesEl.scrollTop = this.chatMessagesEl.scrollHeight;
-  }
-
   render() {
-    let previousUser;
-
     return (
       <div id="chat" className="Chat-page">
         <div className="Chat-nav">
@@ -94,19 +80,7 @@ export default class Chat extends React.Component {
         <AudioNotification ref={el => (this.audioNotification = el)} />
 
         <div className="Chat-chatArea">
-          <ul className="Chat-messages" ref={el => (this.chatMessagesEl = el)}>
-            {this.state.messages.map(message => {
-              const renderUser = message.user_acc.username !== previousUser;
-              previousUser = message.user_acc.username;
-              return (
-                <ChatMessage
-                  message={message}
-                  renderUser={renderUser}
-                  key={message.id}
-                />
-              );
-            })}
-          </ul>
+          <Messages messages={this.state.messages} />
           <Users users={this.props.users} className="Chat-users" />
         </div>
 

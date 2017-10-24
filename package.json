@@ -27,7 +27,7 @@
   },
   "scripts": {
     "migrate": "node src/tools/migrate.js",
-    "build": "poi build src/app/index.jsx",
+    "heroku-postbuild": "poi build src/app/index.jsx",
     "start": "node src/server/dankchat.js",
     "dev": "node src/server/dankchat.js & poi watch src/app/index.jsx",
     "lint": "eslint --ext .js --ext .jsx src",
