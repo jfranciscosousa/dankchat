@@ -1,27 +1,9 @@
 {
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "node": true
-  },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
-  "plugins": [
-    "react"
-  ],
-  "parserOptions": {
-    "ecmaVersion": 8,
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "sourceType": "module"
-  },
-  "globals": {
-    "$": true,
-    "io": true,
-    "Autolinker": true
-  },
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "parser": "babel-eslint",
   "rules": {
+    "prettier/prettier": "error",
     "indent": [
       "error",
       2
@@ -38,6 +20,11 @@
       "error",
       "always"
     ],
-    "no-console": "off"
+    "no-use-before-define": "off",
+    "consistent-return": "off",
+    "no-return-assign": "off",
+    "no-plusplus": "off",
+    "no-bitwise": "off",
+    "prefer-destructuring": "off"
   }
 }

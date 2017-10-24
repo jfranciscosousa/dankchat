@@ -2,11 +2,11 @@ import React from "react";
 
 let playNotif = false;
 
-window.onfocus = function() {
+window.onfocus = () => {
   playNotif = false;
 };
 
-window.onblur = function() {
+window.onblur = () => {
   playNotif = true;
 };
 
@@ -16,6 +16,13 @@ export default class AudioNotification extends React.Component {
   }
 
   render() {
-    return <audio id="notif" src="./assets/sounds/notif.mp3" preload="auto" ref={(el) => this.audio = el} />;
+    return (
+      <audio
+        id="notif"
+        src="./assets/sounds/notif.mp3"
+        preload="auto"
+        ref={el => (this.audio = el)}
+      />
+    );
   }
 }

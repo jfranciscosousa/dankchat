@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import socket from "../../socket";
 
-import "./Users.scss";
+import "./index.scss";
 
 export default class Users extends React.Component {
   constructor(props) {
@@ -15,16 +15,16 @@ export default class Users extends React.Component {
   }
 
   componentWillMount() {
-    socket.on("user joined", (data) => {
-      this.setState((prevState) => {
+    socket.on("user joined", data => {
+      this.setState(prevState => {
         prevState.users.add(data.username);
 
         return { users: prevState.users };
       });
     });
 
-    socket.on("user left", (data) => {
-      this.setState((prevState) => {
+    socket.on("user left", data => {
+      this.setState(prevState => {
         prevState.users.delete(data.username);
 
         return { users: prevState.users };
@@ -33,16 +33,22 @@ export default class Users extends React.Component {
   }
 
   render() {
-    return <ul className="Chat-users-list">
-      {Array.from(this.state.users).map((user) => (
-        <li className="Chat-users-element" key={user}>
-          {user}
-        </li>
-      ))}
-    </ul>;
+    return (
+      <ul className="Chat-users-list">
+        {Array.from(this.state.users).map(user => (
+          <li className="Chat-users-element" key={user}>
+            {user}
+          </li>
+        ))}
+      </ul>
+    );
   }
 }
 
 Users.propTypes = {
   users: PropTypes.instanceOf(Set)
+};
+
+Users.defaultProps = {
+  users: new Set()
 };

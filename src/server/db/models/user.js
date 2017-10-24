@@ -1,4 +1,4 @@
-var Waterline = require("waterline");
+const Waterline = require("waterline");
 
 exports.default = Waterline.Collection.extend({
   schema: "true",

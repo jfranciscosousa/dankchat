@@ -1,18 +1,17 @@
 const postgresAdapter = require("sails-postgresql");
-let DB_URL = process.env.DATABASE_URL;
+
+const DB_URL = process.env.DATABASE_URL;
 let migrate;
 
-if (process.env.NODE_ENV == "production")
-  migrate = "safe";
-else
-  migrate = "alter";
+if (process.env.NODE_ENV === "production") migrate = "safe";
+else migrate = "alter";
 
 exports.default = {
   adapters: {
-    "postgresql": postgresAdapter
+    postgresql: postgresAdapter
   },
   defaults: {
-    migrate: migrate
+    migrate
   },
   connections: {
     default: {

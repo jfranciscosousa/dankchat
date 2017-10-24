@@ -1,5 +1,3 @@
 module.exports = {
-  presets: [
-    require("poi-preset-react")()
-  ]
+  presets: [require("poi-preset-react")()]
 };

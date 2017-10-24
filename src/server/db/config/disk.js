@@ -1,8 +1,8 @@
-var sailsDiskAdapter = require("sails-disk");
+const sailsDiskAdapter = require("sails-disk");
 
 exports.default = {
   adapters: {
-    "disk": sailsDiskAdapter
+    disk: sailsDiskAdapter
   },
   defaults: {
     migrate: "alter"

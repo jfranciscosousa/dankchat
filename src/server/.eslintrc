@@ -1,0 +1,8 @@
+{
+  "env": { "node": true },
+  "rules": {
+    "no-param-reassign": "off",
+    "no-console": "off",
+    "global-require": "off"
+  }
+}
