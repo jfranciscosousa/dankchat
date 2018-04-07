@@ -1,0 +1,73 @@
+$nav-height: 50px;
+$input-height: 70px;
+$area-height: calc(100vh - (($nav-height + $input-height)));
+
+.Chat {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: $nav-height $area-height $input-height;
+  grid-auto-rows: 100%;
+}
+
+.Chat-nav {
+  display: flex;
+  justify-content: flex-end;
+
+  background-color: black;
+  color: white;
+}
+
+button.Chat-nav-logout {
+  padding: 0;
+  margin-top: auto;
+  margin-right: 25px;
+  margin-bottom: auto;
+
+  background: none;
+  border: none;
+  color: inherit;
+
+  cursor: pointer;
+  outline: inherit;
+
+  font: inherit;
+}
+
+.Chat-area {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+
+.Chat-messages {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  ul {
+    list-style: none;
+  }
+}
+
+.Chat-log {
+  margin: 5px;
+
+  color: gray;
+
+  font-size: 70%;
+
+  text-align: center;
+}
+
+.Chat-inputMessage {
+  width: 100%;
+  height: 100%;
+
+  padding-left: 10px;
+
+  border: 10px solid #000;
+  outline: none;
+
+  font-size: 75%;
+}
