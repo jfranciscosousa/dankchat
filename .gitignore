@@ -1,19 +1,23 @@
-logs
-*.log
-pids
-*.pid
-*.seed
-lib-cov
-coverage
-.grunt
-.lock-wscript
-build/Release
-node_modules
-certs
-*.db
-*.exe
-*.key
-*.tmp
-src/lib/
-.vscode/
-dist/
+# App artifacts
+/_build
+/db
+/deps
+/*.ez
+.env
+# Generated on crash by the VM
+erl_crash.dump
+
+# Files matching config/*.secret.exs pattern contain sensitive
+# data and you should not commit them into version control.
+#
+# Alternatively, you may comment the line below and commit the
+# secrets files as long as you replace their contents by environment
+# variables.
+/config/*.secret.exs
+
+/priv/static/css
+/priv/static/js
+/priv/static/images
+/priv/static
+/assets/.cache
+/assets/dist

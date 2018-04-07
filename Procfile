@@ -1,1 +1,1 @@
-web: yarn start
+web: MIX_ENV=prod mix phx.server
