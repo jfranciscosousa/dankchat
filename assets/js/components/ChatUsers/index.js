@@ -9,7 +9,7 @@ export default class Users extends React.Component {
   render() {
     return (
       <div className="Chat-users-list">
-        {Array.from(this.props.users).map(user => (
+        {this.props.users.map(user => (
           <div className="Chat-users-element" key={user}>
             {user}
           </div>

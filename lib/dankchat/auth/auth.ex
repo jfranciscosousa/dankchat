@@ -31,7 +31,8 @@ defmodule Dankchat.Auth do
   end
 
   def authenticate_user(username, password) do
-    query = from u in User, where: u.username == ^username
+    query = from(u in User, where: u.username == ^username)
+
     Repo.one(query)
     |> check_password(username, password)
   end

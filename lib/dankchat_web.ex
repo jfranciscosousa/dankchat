@@ -10,8 +10,9 @@ defmodule DankchatWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/dankchat_web/templates",
-                        namespace: DankchatWeb
+      use Phoenix.View,
+        root: "lib/dankchat_web/templates",
+        namespace: DankchatWeb
 
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
 

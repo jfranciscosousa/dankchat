@@ -4,7 +4,7 @@ defmodule Dankchat.Auth.Pipeline do
     error_handler: Dankchat.Auth.ErrorHandler,
     module: Dankchat.Auth.Guardian
 
-  plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}
-  plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
-  plug Guardian.Plug.LoadResource, allow_blank: true
+  plug(Guardian.Plug.VerifySession, claims: %{"typ" => "access"})
+  plug(Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"})
+  plug(Guardian.Plug.LoadResource, allow_blank: true)
 end

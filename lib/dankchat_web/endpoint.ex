@@ -1,34 +1,42 @@
 defmodule DankchatWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dankchat
 
-  socket "/socket", DankchatWeb.UserSocket
+  socket("/socket", DankchatWeb.UserSocket)
 
-  plug Plug.Static,
-    at: "/", from: :dankchat, gzip: true,
+  plug(
+    Plug.Static,
+    at: "/",
+    from: :dankchat,
+    gzip: true,
     only: ~w(css fonts images sounds js assets favicon.ico robots.txt)
+  )
 
   if code_reloading? do
-    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-    plug Phoenix.LiveReloader
-    plug Phoenix.CodeReloader
+    socket("/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket)
+    plug(Phoenix.LiveReloader)
+    plug(Phoenix.CodeReloader)
   end
 
-  plug Plug.Logger
+  plug(Plug.Logger)
 
-  plug Plug.Parsers,
+  plug(
+    Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Poison
+  )
 
-  plug Plug.MethodOverride
-  plug Plug.Head
+  plug(Plug.MethodOverride)
+  plug(Plug.Head)
 
-  plug Plug.Session,
+  plug(
+    Plug.Session,
     store: :cookie,
     key: "_dankchat_key",
     signing_salt: "dRUYi7Ks"
+  )
 
-  plug DankchatWeb.Router
+  plug(DankchatWeb.Router)
 
   def init(_key, config) do
     if config[:load_from_system_env] do

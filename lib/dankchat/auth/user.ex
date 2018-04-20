@@ -5,9 +5,9 @@ defmodule Dankchat.Auth.User do
 
   @derive {Poison.Encoder, only: [:username]}
   schema "users" do
-    field :username, :string
-    field :password, :string
-    has_many :messages, Dankchat.Chat.Message
+    field(:username, :string)
+    field(:password, :string)
+    has_many(:messages, Dankchat.Chat.Message)
 
     timestamps()
   end

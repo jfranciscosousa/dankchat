@@ -1,15 +1,12 @@
 $nav-height: 50px;
 $input-height: 70px;
-$area-height: calc(100vh - ($input-height + $nav-height));
-
-.Chat {
-
-}
+$area-height: 100vh;
 
 .Chat-nav {
   position: absolute;
 
   top: 0;
+  z-index: 1;
 
   display: flex;
   justify-content: flex-end;
@@ -38,12 +35,17 @@ button.Chat-nav-logout {
 }
 
 .Chat-area {
-  flex: 1;
+  position: absolute;
+  z-index: -1;
 
   display: grid;
+  width: 100%;
+  height: 100%;
   grid-template-columns: 80% 20%;
 
-  margin-top: $nav-height;
+
+  padding-top: $nav-height;
+  padding-bottom: $input-height;
 }
 
 .Chat-messages {
@@ -71,6 +73,10 @@ button.Chat-nav-logout {
 }
 
 .Chat-inputMessage {
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+
   width: 100%;
   height: $input-height;
 

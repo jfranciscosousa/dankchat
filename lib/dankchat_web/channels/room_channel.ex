@@ -6,7 +6,7 @@ defmodule DankchatWeb.RoomChannel do
     current_user = Guardian.Phoenix.Socket.current_resource(socket).username
     users = RoomChannelMonitor.user_joined(current_user)
 
-    send self(), {:after_join, users}
+    send(self(), {:after_join, users})
 
     {:ok, socket}
   end
@@ -31,12 +31,15 @@ defmodule DankchatWeb.RoomChannel do
 
     message = Dankchat.Chat.create_message(%{body: body, user_id: current_user.id})
 
-    broadcast! socket, "new_msg", message
+    broadcast!(socket, "new_msg", message)
 
     {:noreply, socket}
   end
 
   defp lobby_update(socket, users) do
-    broadcast! socket, "lobby_update", %{ users: MapSet.to_list(users), messages: Dankchat.Chat.list_messages }
+    broadcast!(socket, "lobby_update", %{
+      users: MapSet.to_list(users),
+      messages: Dankchat.Chat.list_messages()
+    })
   end
 end

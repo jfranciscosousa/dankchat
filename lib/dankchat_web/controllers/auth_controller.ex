@@ -11,6 +11,7 @@ defmodule DankchatWeb.AuthController do
 
         conn
         |> render("index.json", user: user, jwt: jwt)
+
       {:error, _reason} ->
         conn
         |> put_status(401)
