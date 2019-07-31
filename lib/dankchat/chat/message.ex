@@ -5,7 +5,7 @@ defmodule Dankchat.Chat.Message do
   @derive {Poison.Encoder, only: [:id, :body, :user, :inserted_at]}
   schema "messages" do
     field :body, :string
-    belongs_to :user, Dankchat.Auth.User
+    belongs_to(:user, Dankchat.Auth.User)
 
     timestamps()
   end

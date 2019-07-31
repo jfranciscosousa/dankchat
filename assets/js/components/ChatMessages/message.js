@@ -1,18 +1,11 @@
+/* eslint-disable no-bitwise */
+
 import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 
-export default class Message extends React.Component {
-  static propTypes = {
-    username: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired
-  };
-
-  /* eslint-disable no-bitwise */
-  get color() {
-    const { username } = this.props;
-
+function Message({ username, date, body }) {
+  function generateColor() {
     let hash = 0;
 
     for (let index = 0; index < username.length; index += 1) {
@@ -28,24 +21,30 @@ export default class Message extends React.Component {
 
     return color;
   }
-  /* eslint-enable no-bitwise */
 
-  get date() {
-    return moment
-      .utc(this.props.date)
-      .toDate()
-      .toLocaleTimeString();
-  }
+  const formattedDate = moment()
+    .utc(date)
+    .toDate()
+    .toLocaleTimeString();
 
-  render() {
-    return (
-      <div>
-        <span className="Chat-message-username" style={{ color: this.color }}>
-          [{this.date}] : {this.props.username}
-        </span>
+  return (
+    <div>
+      <span
+        className="Chat-message-username"
+        style={{ color: generateColor() }}
+      >
+        [{formattedDate}] : {username}
+      </span>
 
-        <span className="Chat-message-body">{this.props.body}</span>
-      </div>
-    );
-  }
+      <span className="Chat-message-body">{body}</span>
+    </div>
+  );
 }
+
+Message.propTypes = {
+  username: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired
+};
+
+export default Message;

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+BLUE='\033[1;34m'
+GREEN='\033[1;32m'
+RED='\033[1;91m'
+RESET='\033[0m'
+
+pp() {
+  echo "\n$1[$2]: $3${RESET}"
+}
+
+pp_info() {
+  pp $BLUE "$1" "$2"
+}
+
+pp_success() {
+  pp $GREEN "$1" "$2"
+}
+
+pp_error() {
+  pp $RED "$1" "$2"
+}
+
+not_installed() {
+  [ ! -x "$(command -v "$@")" ]
+}
+
+ensure_confirmation() {
+  read -r "confirmation?please confirm you want to continue [y/n] (default: y)"
+  confirmation=${confirmation:-"y"}
+
+  if [ "$confirmation" != "y" ]; then
+    exit 1
+  fi
+}

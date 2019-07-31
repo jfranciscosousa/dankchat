@@ -7,7 +7,7 @@ defmodule Dankchat.Auth.User do
   schema "users" do
     field :username, :string
     field :password, :string
-    has_many :messages, Dankchat.Chat.Message
+    has_many(:messages, Dankchat.Chat.Message)
 
     timestamps()
   end
@@ -19,7 +19,10 @@ defmodule Dankchat.Auth.User do
     |> put_pass_hash()
   end
 
-  defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+  defp put_pass_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password: password}} =
+           changeset
+       ) do
     change(changeset, password: Bcrypt.hashpwsalt(password))
   end
 

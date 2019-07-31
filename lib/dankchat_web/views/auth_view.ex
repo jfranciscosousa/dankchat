@@ -6,7 +6,8 @@ defmodule DankchatWeb.AuthView do
       status: :ok,
       token: jwt,
       username: user.username,
-      message: "You are successfully logged in! Add this token to authorization header to make authorized requests."
+      message:
+        "You are successfully logged in! Add this token to authorization header to make authorized requests."
     }
   end
 end

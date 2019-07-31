@@ -1,8 +1,8 @@
 defmodule Dankchat.Auth do
   alias Comeonin.Bcrypt
-  import Ecto.Query, warn: false
-  alias Dankchat.Repo
   alias Dankchat.Auth.User
+  alias Dankchat.Repo
+  import Ecto.Query, warn: false
 
   def list_users do
     Repo.all(User)
@@ -31,7 +31,8 @@ defmodule Dankchat.Auth do
   end
 
   def authenticate_user(username, password) do
-    query = from u in User, where: u.username == ^username
+    query = from(u in User, where: u.username == ^username)
+
     Repo.one(query)
     |> check_password(username, password)
   end

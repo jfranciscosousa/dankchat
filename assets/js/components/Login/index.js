@@ -15,12 +15,9 @@ export default class Login extends React.Component {
       password: "",
       errorMessage: ""
     };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.submit = this.submit.bind(this);
   }
 
-  handleInputChange(event) {
+  handleInputChange = event => {
     const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const { name } = target;
@@ -28,26 +25,31 @@ export default class Login extends React.Component {
     this.setState({
       [name]: value
     });
-  }
+  };
 
-  async submit(event) {
-    if (event.key === "Enter" && this.state.username !== "") {
+  submit = async event => {
+    const { onLogin } = this.props;
+    const { username, password } = this.state;
+
+    if (event.key === "Enter" && username !== "") {
       try {
         const response = await axios.post("/api/auth", {
           session: {
-            username: this.state.username.trim(),
-            password: this.state.password
+            username: username.trim(),
+            password
           }
         });
 
-        this.props.onLogin(response.data.token);
+        onLogin(response.data.token);
       } catch (error) {
         console.log(error); //eslint-disable-line
       }
     }
-  }
+  };
 
   render() {
+    const { username, password, errorMessage } = this.state;
+
     return (
       <form className="Login-page" role="presentation" onKeyPress={this.submit}>
         <h3 className="Login-page-label">DankName</h3>
@@ -56,7 +58,7 @@ export default class Login extends React.Component {
           className="Login-page-input"
           type="text"
           maxLength="14"
-          value={this.state.username}
+          value={username}
           onChange={this.handleInputChange}
         />
         <h3 className="Login-page-label">DankPass</h3>
@@ -65,10 +67,10 @@ export default class Login extends React.Component {
           type="password"
           className="Login-page-input"
           maxLength="14"
-          value={this.state.password}
+          value={password}
           onChange={this.handleInputChange}
         />
-        <h3 className="Login-page-label">{this.state.errorMessage}</h3>
+        <h3 className="Login-page-label">{errorMessage}</h3>
       </form>
     );
   }

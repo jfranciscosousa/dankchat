@@ -25,13 +25,13 @@ defmodule DankchatWeb.ChannelCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Dankchat.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Dankchat.Repo, {:shared, self()})
     end
+
     :ok
   end
-
 end

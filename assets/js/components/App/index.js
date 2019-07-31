@@ -1,25 +1,34 @@
-import React from "react";
+/* eslint-disable jsx-a11y/media-has-caption */
+import React, { useState } from "react";
 import Chat from "../Chat";
 import Login from "../Login";
 
-export default class App extends React.Component {
-  state = {
-    token: null
-  };
+import sound from "../../../static/sounds/notif.mp3";
 
-  onLogin = token => {
-    this.setState({ token });
-  };
+export default function App() {
+  const [token, setToken] = useState();
 
-  onLogout = () => {
-    this.setState({ token: null });
-  };
-
-  render() {
-    if (this.state.token) {
-      return <Chat token={this.state.token} onLogout={this.onLogout} />;
-    }
-
-    return <Login onLogin={this.onLogin} />;
+  function onLogin(newToken) {
+    setToken(newToken);
   }
+
+  function onLogout() {
+    setToken(null);
+  }
+
+  return (
+    <>
+      <audio
+        id="notif"
+        src={sound}
+        preload="auto"
+        style={{ display: "none" }}
+      />
+      {token ? (
+        <Chat token={token} onLogout={onLogout} />
+      ) : (
+        <Login onLogin={onLogin} />
+      )}
+    </>
+  );
 }

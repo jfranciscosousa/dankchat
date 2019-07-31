@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+set -e
+source "./bin/functions"
+
+pp_info "lint" "running the elixir formatter"
+mix format --check-formatted --dot-formatter .formatter.exs
+echo "No errors found...."
+
+pp_info "lint" "running credo"
+mix credo --strict
+
+cd frontend
+
+pp_info "lint" "running eslint for javascript"
+yarn lint
+
+pp_info "lint" "running stylelint for css"
+yarn lint-styles
+
+pp_success "Done! No errors!"

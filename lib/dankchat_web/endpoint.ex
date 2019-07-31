@@ -4,7 +4,9 @@ defmodule DankchatWeb.Endpoint do
   socket "/socket", DankchatWeb.UserSocket
 
   plug Plug.Static,
-    at: "/", from: :dankchat, gzip: true,
+    at: "/",
+    from: :dankchat,
+    gzip: true,
     only: ~w(css fonts images sounds js assets favicon.ico robots.txt)
 
   if code_reloading? do
@@ -32,7 +34,10 @@ defmodule DankchatWeb.Endpoint do
 
   def init(_key, config) do
     if config[:load_from_system_env] do
-      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+      port =
+        System.get_env("PORT") ||
+          raise "expected the PORT environment variable to be set"
+
       {:ok, Keyword.put(config, :http, [:inet6, port: port])}
     else
       {:ok, config}

@@ -47,7 +47,10 @@ defmodule Dankchat.AuthTest do
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Auth.update_user(user, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Auth.update_user(user, @invalid_attrs)
+
       assert user == Auth.get_user!(user.id)
     end
 
@@ -67,7 +70,10 @@ defmodule Dankchat.AuthTest do
     alias Dankchat.Auth.User
 
     @valid_attrs %{password: "some password", username: "some username"}
-    @update_attrs %{password: "some updated password", username: "some updated username"}
+    @update_attrs %{
+      password: "some updated password",
+      username: "some updated username"
+    }
     @invalid_attrs %{password: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -109,7 +115,10 @@ defmodule Dankchat.AuthTest do
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Auth.update_user(user, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Auth.update_user(user, @invalid_attrs)
+
       assert user == Auth.get_user!(user.id)
     end
 

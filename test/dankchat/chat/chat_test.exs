@@ -47,7 +47,10 @@ defmodule Dankchat.ChatTest do
 
     test "update_message/2 with invalid data returns error changeset" do
       message = message_fixture()
-      assert {:error, %Ecto.Changeset{}} = Chat.update_message(message, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Chat.update_message(message, @invalid_attrs)
+
       assert message == Chat.get_message!(message.id)
     end
 

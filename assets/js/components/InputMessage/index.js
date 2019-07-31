@@ -1,46 +1,39 @@
-import React, { PureComponent } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-export default class InputMessage extends PureComponent {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired
-  };
+function InputMessage({ onSubmit }) {
+  const [message, setMessage] = useState("");
 
-  state = {
-    message: ""
-  };
+  function handleInputChange(event) {
+    setMessage(event.target.value);
+  }
 
-  handleInputChange = event => {
-    const { target } = event;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const { name } = target;
-
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleSubmit = event => {
+  function handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    this.props.onSubmit(this.state.message);
-    this.setState({ message: "" });
-  };
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          autoFocus="true"
-          autoComplete="false"
-          name="message"
-          value={this.state.message}
-          onChange={this.handleInputChange}
-          className="Chat-inputMessage"
-          placeholder="Type here..."
-        />
-      </form>
-    );
+    onSubmit(message);
+    setMessage("");
   }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        // eslint-disable-next-line jsx-a11y/no-autofocus
+        autoFocus="true"
+        autoComplete="false"
+        name="message"
+        value={message}
+        onChange={handleInputChange}
+        className="Chat-inputMessage"
+        placeholder="Type here..."
+      />
+    </form>
+  );
 }
+
+InputMessage.propTypes = {
+  onSubmit: PropTypes.func.isRequired
+};
+
+export default InputMessage;

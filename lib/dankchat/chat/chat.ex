@@ -1,7 +1,7 @@
 defmodule Dankchat.Chat do
   import Ecto.Query, warn: false
-  alias Dankchat.Repo
   alias Dankchat.Chat.Message
+  alias Dankchat.Repo
 
   def list_messages do
     Repo.all(Message)
@@ -11,10 +11,11 @@ defmodule Dankchat.Chat do
   def get_message!(id), do: Repo.get!(Message, id)
 
   def create_message(attrs \\ %{}) do
-    message = %Message{}
-    |> Message.changeset(attrs)
-    |> Repo.insert!
-    |> Repo.preload(:user)
+    message =
+      %Message{}
+      |> Message.changeset(attrs)
+      |> Repo.insert!()
+      |> Repo.preload(:user)
   end
 
   def update_message(%Message{} = message, attrs) do

@@ -13,12 +13,10 @@ config :dankchat,
 config :dankchat, DankchatWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: DankchatWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Dankchat.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Dankchat.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Guardian auth
-config :dankchat, Dankchat.Auth.Guardian,
-       issuer: "dankchat"
+config :dankchat, Dankchat.Auth.Guardian, issuer: "dankchat"
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -27,4 +25,4 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

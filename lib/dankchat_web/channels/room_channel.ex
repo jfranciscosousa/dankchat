@@ -29,14 +29,18 @@ defmodule DankchatWeb.RoomChannel do
   def handle_in("new_msg", %{"body" => body}, socket) do
     current_user = Guardian.Phoenix.Socket.current_resource(socket)
 
-    message = Dankchat.Chat.create_message(%{body: body, user_id: current_user.id})
+    message =
+      Dankchat.Chat.create_message(%{body: body, user_id: current_user.id})
 
-    broadcast! socket, "new_msg", message
+    broadcast!(socket, "new_msg", message)
 
     {:noreply, socket}
   end
 
   defp lobby_update(socket, users) do
-    broadcast! socket, "lobby_update", %{ users: MapSet.to_list(users), messages: Dankchat.Chat.list_messages }
+    broadcast!(socket, "lobby_update", %{
+      users: MapSet.to_list(users),
+      messages: Dankchat.Chat.list_messages()
+    })
   end
 end

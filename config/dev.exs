@@ -7,17 +7,25 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with parcel to recompile .js and .css sources.
 config :dankchat, DankchatWeb.Endpoint,
-  secret_key_base: "fYDaaOcH5ZEMJZ67MM/iTdv/8sUKEWs8LnpOO8/Fdq7O3uxBxXepuH3KOBXUH9z0",
+  secret_key_base:
+    "fYDaaOcH5ZEMJZ67MM/iTdv/8sUKEWs8LnpOO8/Fdq7O3uxBxXepuH3KOBXUH9z0",
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/.bin/parcel", "watch", "js/app.js", "--out-dir", "../priv/static/assets",
-  "--public-url", "/assets",
-  cd: Path.expand("../assets", __DIR__)]]
+  watchers: [
+    node: [
+      "node_modules/.bin/parcel",
+      "watch",
+      "assets/js/app.js",
+      "--out-dir",
+      "./priv/static/assets",
+      "--public-url",
+      "/assets"
+    ]
+  ]
 
-config :dankchat, Dankchat.Auth.Guardian,
-  secret_key: "anho"
+config :dankchat, Dankchat.Auth.Guardian, secret_key: "anho"
 
 # ## SSL Support
 #
