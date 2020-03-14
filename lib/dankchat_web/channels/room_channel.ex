@@ -39,7 +39,7 @@ defmodule DankchatWeb.RoomChannel do
 
   defp lobby_update(socket, users) do
     broadcast!(socket, "lobby_update", %{
-      users: MapSet.to_list(users),
+      users: Map.keys(users),
       messages: Dankchat.Chat.list_messages()
     })
   end

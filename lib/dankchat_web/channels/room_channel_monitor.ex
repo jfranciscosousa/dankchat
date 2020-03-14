@@ -1,12 +1,16 @@
 defmodule DankchatWeb.RoomChannelMonitor do
   use GenServer
 
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
+
   def start_link do
-    GenServer.start_link(__MODULE__, MapSet.new(), name: __MODULE__)
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
   def start do
-    GenServer.cast(__MODULE__, MapSet.new())
+    GenServer.cast(__MODULE__, %{})
   end
 
   def user_joined(username) do
@@ -23,12 +27,12 @@ defmodule DankchatWeb.RoomChannelMonitor do
 
   def handle_call({:user_joined, username}, _from, state) do
     new_state =
-      case MapSet.member?(state, username) do
-        false ->
-          MapSet.put(state, username)
+      case Map.get(state, username) do
+        nil ->
+          Map.put(state, username, 1)
 
-        true ->
-          nil
+        instances ->
+          Map.put(state, username, instances + 1)
       end
 
     {:reply, new_state, new_state}
@@ -38,9 +42,24 @@ defmodule DankchatWeb.RoomChannelMonitor do
     {:reply, state, state}
   end
 
-  def handle_call({:user_left, username}, _from, state) do
-    new_state = MapSet.delete(state, username)
+  def handle_call({:user_left, username}, from, state) do
+    new_state =
+      case Map.get(state, username) do
+        nil ->
+          state
+
+        instances ->
+          delete(state, username, instances)
+      end
 
     {:reply, new_state, new_state}
+  end
+
+  defp delete(state, username, 1) do
+    Map.delete(state, username)
+  end
+
+  defp delete(state, username, instances) do
+    Map.put(state, username, instances - 1)
   end
 end

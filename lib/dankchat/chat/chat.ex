@@ -11,11 +11,10 @@ defmodule Dankchat.Chat do
   def get_message!(id), do: Repo.get!(Message, id)
 
   def create_message(attrs \\ %{}) do
-    message =
-      %Message{}
-      |> Message.changeset(attrs)
-      |> Repo.insert!()
-      |> Repo.preload(:user)
+    %Message{}
+    |> Message.changeset(attrs)
+    |> Repo.insert!()
+    |> Repo.preload(:user)
   end
 
   def update_message(%Message{} = message, attrs) do

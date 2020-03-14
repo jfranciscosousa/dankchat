@@ -20,7 +20,7 @@ function InputMessage({ onSubmit }) {
     <form onSubmit={handleSubmit}>
       <input
         // eslint-disable-next-line jsx-a11y/no-autofocus
-        autoFocus="true"
+        autoFocus
         autoComplete="false"
         name="message"
         value={message}

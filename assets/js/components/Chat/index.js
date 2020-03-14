@@ -1,17 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useChatContext } from "root/hooks/useChannel";
 import ChatMessages from "../ChatMessages";
 import ChatUsers from "../ChatUsers";
 import InputMessage from "../InputMessage";
-import useChannels from "../../hooks/useChannels";
 
-function Chat({ onLogout, token }) {
-  const [users, messages, submitMessage] = useChannels(token);
+function Chat() {
+  const { users, messages, logout, submitMessage } = useChatContext();
 
   return (
     <div className="Chat">
       <div className="Chat-nav">
-        <button className="Chat-nav-logout" type="button" onClick={onLogout}>
+        <button className="Chat-nav-logout" type="button" onClick={logout}>
           Logout
         </button>
       </div>
@@ -26,10 +25,5 @@ function Chat({ onLogout, token }) {
     </div>
   );
 }
-
-Chat.propTypes = {
-  onLogout: PropTypes.func.isRequired,
-  token: PropTypes.string.isRequired
-};
 
 export default Chat;

@@ -64,7 +64,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :dankchat, Dankchat.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: Map.fetch!(System.get_env(), "USER"),
+  username: "postgres",
   database: "dankchat_dev",
   hostname: "localhost",
   pool_size: 10

@@ -1,77 +1,63 @@
-import React from "react";
-import PropTypes from "prop-types";
-import axios from "axios";
+import React, { useState } from "react";
+import { useChatContext } from "root/hooks/useChannel";
 
-export default class Login extends React.Component {
-  static propTypes = {
-    onLogin: PropTypes.func.isRequired
-  };
+export default function Login() {
+  const { login } = useChatContext();
+  const [state, setState] = useState({
+    username: "",
+    password: "",
+    errorMessage: ""
+  });
+  const { username, password, errorMessage } = state;
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      username: "",
-      password: "",
-      errorMessage: ""
-    };
-  }
-
-  handleInputChange = event => {
+  function handleInputChange(event) {
     const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const { name } = target;
 
-    this.setState({
+    setState({
+      ...state,
       [name]: value
     });
-  };
+  }
 
-  submit = async event => {
-    const { onLogin } = this.props;
-    const { username, password } = this.state;
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-    if (event.key === "Enter" && username !== "") {
+    if (state.username !== "") {
       try {
-        const response = await axios.post("/api/auth", {
-          session: {
-            username: username.trim(),
-            password
-          }
-        });
-
-        onLogin(response.data.token);
+        await login(username, password);
       } catch (error) {
         console.log(error); //eslint-disable-line
       }
     }
-  };
-
-  render() {
-    const { username, password, errorMessage } = this.state;
-
-    return (
-      <form className="Login-page" role="presentation" onKeyPress={this.submit}>
-        <h3 className="Login-page-label">DankName</h3>
-        <input
-          name="username"
-          className="Login-page-input"
-          type="text"
-          maxLength="14"
-          value={username}
-          onChange={this.handleInputChange}
-        />
-        <h3 className="Login-page-label">DankPass</h3>
-        <input
-          name="password"
-          type="password"
-          className="Login-page-input"
-          maxLength="14"
-          value={password}
-          onChange={this.handleInputChange}
-        />
-        <h3 className="Login-page-label">{errorMessage}</h3>
-      </form>
-    );
   }
+
+  return (
+    <form className="Login-page" onSubmit={handleSubmit}>
+      <h3 className="Login-page-label">DankName</h3>
+      <input
+        name="username"
+        className="Login-page-input"
+        type="text"
+        maxLength="14"
+        value={username}
+        onChange={handleInputChange}
+      />
+      <h3 className="Login-page-label">DankPass</h3>
+      <input
+        name="password"
+        type="password"
+        className="Login-page-input"
+        maxLength="14"
+        value={password}
+        onChange={handleInputChange}
+      />
+      <h3 className="Login-page-label">{errorMessage}</h3>
+
+      <button style={{ display: "none" }} type="submit">
+        Submit
+      </button>
+    </form>
+  );
 }
