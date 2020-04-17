@@ -46,7 +46,7 @@ else
 fi
 
 pp_info "setup" "Installing node dependencies..."
-(cd frontend && yarn install)
+yarn
 
 pp_info "setup" "Setting up the env..."
 if [ ! -f .envrc ]; then

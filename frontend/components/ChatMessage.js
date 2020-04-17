@@ -1,7 +1,21 @@
 /* eslint-disable no-bitwise */
-
 import React from "react";
 import PropTypes from "prop-types";
+import styled from "@emotion/styled";
+
+const Username = styled.span`
+  color: ${(props) => props.color};
+
+  font-weight: 700;
+  line-height: 50px;
+`;
+
+const Body = styled.span`
+  padding-left: 15px;
+
+  line-height: 50px;
+  word-wrap: break-word;
+`;
 
 function generateColor(username) {
   let hash = 0;
@@ -25,14 +39,11 @@ function Message({ username, date, body }) {
 
   return (
     <div>
-      <span
-        className="Chat-message-username"
-        style={{ color: generateColor(username) }}
-      >
+      <Username color={generateColor(username)}>
         [{formattedDate}] : {username}
-      </span>
+      </Username>
 
-      <span className="Chat-message-body">{body}</span>
+      <Body>{body}</Body>
     </div>
   );
 }
@@ -40,7 +51,7 @@ function Message({ username, date, body }) {
 Message.propTypes = {
   username: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired
+  body: PropTypes.string.isRequired,
 };
 
 export default Message;

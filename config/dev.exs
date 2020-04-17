@@ -15,13 +15,7 @@ config :dankchat, DankchatWeb.Endpoint,
   check_origin: false,
   watchers: [
     node: [
-      "node_modules/.bin/parcel",
-      "watch",
-      "assets/js/app.js",
-      "--out-dir",
-      "./priv/static/assets",
-      "--public-url",
-      "/assets"
+      "server.dev.js"
     ]
   ]
 

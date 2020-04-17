@@ -1,6 +1,16 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import Message from "./message";
+import styled from "@emotion/styled";
+import ChatMessage from "./ChatMessage";
+
+const MessageList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+
+  list-style: none;
+`;
 
 function ChatMessages({ messages }) {
   const chatAreaRef = useRef();
@@ -10,16 +20,16 @@ function ChatMessages({ messages }) {
   }, [messages]);
 
   return (
-    <div className="Chat-messages" ref={chatAreaRef}>
-      {messages.map(message => (
-        <Message
+    <MessageList ref={chatAreaRef}>
+      {messages.map((message) => (
+        <ChatMessage
           key={message.id}
           username={message.user.username}
           date={message.inserted_at}
           body={message.body}
         />
       ))}
-    </div>
+    </MessageList>
   );
 }
 
@@ -28,11 +38,11 @@ ChatMessages.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       user: PropTypes.shape({
-        username: PropTypes.string.isRequired
+        username: PropTypes.string.isRequired,
       }).isRequired,
-      body: PropTypes.string.isRequired
+      body: PropTypes.string.isRequired,
     })
-  ).isRequired
+  ).isRequired,
 };
 
 export default ChatMessages;

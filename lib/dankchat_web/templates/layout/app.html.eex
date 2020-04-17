@@ -8,11 +8,15 @@
     <meta name="author" content="">
 
     <title>Dankchat</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/assets/app.css") %>">
+
+    <%= if Mix.env == :dev do %>
+      <script type="text/javascript" src="http://localhost:8000/js/index.js" %>"></script>
+    <% else %>
+      <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/index.js") %>"></script>
+    <% end %>
   </head>
 
   <body>
     <%= render @view_module, @view_template, assigns %>
-    <script src="<%= static_path(@conn, "/assets/app.js") %>"></script>
   </body>
 </html>

@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "emotion",
+    "@babel/plugin-proposal-class-properties"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "@babel/plugin-transform-react-jsx-source",
+        "react-hot-loader/babel"
+      ]
+    }
+  }
+}
