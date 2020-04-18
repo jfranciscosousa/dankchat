@@ -42,7 +42,7 @@ defmodule DankchatWeb.RoomChannelMonitor do
     {:reply, state, state}
   end
 
-  def handle_call({:user_left, username}, from, state) do
+  def handle_call({:user_left, username}, _from, state) do
     new_state =
       case Map.get(state, username) do
         nil ->

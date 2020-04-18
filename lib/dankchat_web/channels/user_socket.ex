@@ -3,8 +3,6 @@ defmodule DankchatWeb.UserSocket do
 
   channel("room:*", DankchatWeb.RoomChannel)
 
-  transport(:websocket, Phoenix.Transports.WebSocket, timeout: 45_000)
-
   def connect(%{"token" => token}, socket) do
     case Guardian.Phoenix.Socket.authenticate(
            socket,

@@ -21,6 +21,7 @@ defmodule DankchatWeb do
       import DankchatWeb.Router.Helpers
       import DankchatWeb.ErrorHelpers
       import DankchatWeb.Gettext
+      alias DankchatWeb.Router.Helpers, as: Routes
     end
   end
 

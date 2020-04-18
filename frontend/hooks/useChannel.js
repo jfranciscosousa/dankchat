@@ -1,4 +1,10 @@
-import React, { useMemo, useReducer, createContext, useContext } from "react";
+import React, {
+  useMemo,
+  useReducer,
+  createContext,
+  useContext,
+  useEffect,
+} from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Socket } from "phoenix";
@@ -21,7 +27,7 @@ function playAudio() {
 
 function buildChannel(token) {
   const socket = new Socket("/socket", {
-    params: { token }
+    params: { token },
   });
 
   socket.connect();
@@ -30,19 +36,25 @@ function buildChannel(token) {
 
   channel
     .join()
-    .receive("ok", resp => {
+    .receive("ok", (resp) => {
       console.log("Joined successfully", resp); // eslint-disable-line
     })
-    .receive("error", resp => {
+    .receive("error", (resp) => {
       console.log("Unable to join", resp); // eslint-disable-line
     });
 
   return channel;
 }
 
+function getUserFromStorage() {
+  return sessionStorage.getItem("user")
+    ? JSON.parse(sessionStorage.getItem("user"))
+    : null;
+}
+
 const INITIAL_STATE = {
   users: [],
-  messages: []
+  messages: [],
 };
 
 function reducer(state, action) {
@@ -70,17 +82,23 @@ export function ChatProvider({ children }) {
 
     const newChannel = buildChannel(state?.user?.token);
 
-    newChannel.on("new_msg", message => {
+    newChannel.on("new_msg", (message) => {
       dispatch({ type: "new_msg", payload: message });
       playAudio();
     });
 
-    newChannel.on("lobby_update", lobby =>
+    newChannel.on("lobby_update", (lobby) =>
       dispatch({ type: "lobby_update", payload: lobby })
     );
 
     return newChannel;
   }, [state?.user?.token]);
+
+  useEffect(() => {
+    const user = getUserFromStorage();
+
+    if (user) dispatch({ type: "login", payload: user });
+  }, []);
 
   function submitMessage(message) {
     channel.push("new_msg", { body: message });
@@ -90,14 +108,17 @@ export function ChatProvider({ children }) {
     const response = await axios.post("/api/auth", {
       session: {
         username: username.trim(),
-        password
-      }
+        password,
+      },
     });
+
+    sessionStorage.setItem("user", JSON.stringify(response.data));
 
     dispatch({ type: "login", payload: response.data });
   }
 
   async function logout() {
+    sessionStorage.removeItem("user");
     channel.leave();
 
     dispatch({ type: "logout" });
@@ -111,7 +132,7 @@ export function ChatProvider({ children }) {
         messages: state.messages,
         login,
         logout,
-        submitMessage
+        submitMessage,
       }}
     >
       {children}
@@ -120,7 +141,7 @@ export function ChatProvider({ children }) {
 }
 
 ChatProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export function useChatContext() {

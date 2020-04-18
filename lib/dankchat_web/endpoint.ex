@@ -1,7 +1,9 @@
 defmodule DankchatWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dankchat
 
-  socket "/socket", DankchatWeb.UserSocket
+  socket "/socket", DankchatWeb.UserSocket,
+    websocket: true,
+    longpoll: false
 
   plug Plug.Static,
     at: "/",
