@@ -11,13 +11,13 @@ module.exports = {
     nodeEnv === "production"
       ? {
           path: path.resolve(__dirname, "./priv/static"),
-          filename: "./js/index.js",
-          publicPath: "/",
+          filename: "./index.js",
+          publicPath: "/assets/",
         }
       : {
           path: path.resolve(__dirname, "./priv/static"),
-          filename: "./js/index.js",
-          publicPath: "http://localhost:8000/",
+          filename: "./index.js",
+          publicPath: "http://localhost:8000/assets/",
         },
   resolve: {
     alias: {
@@ -47,6 +47,7 @@ module.exports = {
   },
   plugins: [new CopyWebpackPlugin([{ from: "frontend/static/", to: "./" }])],
   devServer: {
+    publicPath: "/assets/",
     historyApiFallback: true,
     host: "0.0.0.0",
     port: 8000,
@@ -55,9 +56,7 @@ module.exports = {
       "Access-Control-Allow-Origin": "*",
     },
     writeToDisk: (filePath) => {
-      return /(favicon\.ico|texture.jpg|robots.txt|particle.png)$/.test(
-        filePath
-      );
+      return /(favicon\.ico|robots.txt)$/.test(filePath);
     },
     /* eslint-disable */
     before: function (app, webpackServer) {

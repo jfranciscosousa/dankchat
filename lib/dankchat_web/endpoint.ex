@@ -9,7 +9,7 @@ defmodule DankchatWeb.Endpoint do
     at: "/",
     from: :dankchat,
     gzip: true,
-    only: ~w(fonts images sounds js assets favicon.ico robots.txt)
+    only: ~w(assets favicon.ico robots.txt)
 
   if code_reloading? do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket

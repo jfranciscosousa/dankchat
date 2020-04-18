@@ -10,9 +10,9 @@
     <title>Dankchat</title>
 
     <%= if Mix.env == :dev do %>
-      <script type="text/javascript" src="http://localhost:8000/js/index.js" %>"></script>
+      <script type="text/javascript" src="http://localhost:8000/assets/index.js" %>"></script>
     <% else %>
-      <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/index.js") %>"></script>
+      <script type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/index.js") %>"></script>
     <% end %>
   </head>
 
