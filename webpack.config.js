@@ -10,12 +10,12 @@ module.exports = {
   output:
     nodeEnv === "production"
       ? {
-          path: path.resolve(__dirname, "./priv/static"),
+          path: path.resolve(__dirname, "./priv/static/assets"),
           filename: "./index.js",
           publicPath: "/assets/",
         }
       : {
-          path: path.resolve(__dirname, "./priv/static"),
+          path: path.resolve(__dirname, "./priv/static/assets"),
           filename: "./index.js",
           publicPath: "http://localhost:8000/assets/",
         },
@@ -45,7 +45,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [new CopyWebpackPlugin([{ from: "frontend/static/", to: "./" }])],
+  plugins: [new CopyWebpackPlugin([{ from: "frontend/static/", to: "../" }])],
   devServer: {
     publicPath: "/assets/",
     historyApiFallback: true,
