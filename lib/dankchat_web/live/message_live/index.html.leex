@@ -1,0 +1,14 @@
+<div class="Chat-page">
+
+<div class="Chat-messages" phx-hook="ScrollBottom">
+  <%= for message <- @messages do %>
+    <p><%= message.body %></p>
+  <% end %>
+</div>
+
+  <%= live_component @socket, DankchatWeb.MessageLive.FormComponent,
+      id: :new,
+      title: @page_title,
+      action: @live_action
+  %>
+</div>

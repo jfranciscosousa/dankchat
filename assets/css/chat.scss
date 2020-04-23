@@ -1,0 +1,10 @@
+.Chat-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.Chat-messages {
+  height: 50vh;
+  margin-bottom: 2rem;
+  overflow: auto;
+}
