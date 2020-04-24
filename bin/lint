@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 set -e
-source "./bin/functions"
+. "./bin/functions"
 
 pp_info "lint" "running the elixir formatter"
 mix format --check-formatted --dot-formatter .formatter.exs

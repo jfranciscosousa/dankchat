@@ -3,25 +3,33 @@
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
-use Mix.Config
 
 # General application configuration
+use Mix.Config
+
 config :dankchat,
   ecto_repos: [Dankchat.Repo]
 
 # Configures the endpoint
 config :dankchat, DankchatWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: DankchatWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Dankchat.PubSub, adapter: Phoenix.PubSub.PG2]
-
-# Configures Guardian auth
-config :dankchat, Dankchat.Auth.Guardian, issuer: "dankchat"
+  secret_key_base:
+    "iBNZvUHjGu8lFKjxXDJALsuJ/lp68th6YDoyi4UuzoyLr7tlQ9yN9k5IJpq7XVNN",
+  render_errors: [
+    view: DankchatWeb.ErrorView,
+    accepts: ~w(html json),
+    layout: false
+  ],
+  pubsub_server: Dankchat.PubSub,
+  live_view: [signing_salt: "4lefBydh"]
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:user_id]
+  metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

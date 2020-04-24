@@ -1,21 +1,18 @@
 {
   "plugins": [
-    "jsx-a11y"
+    "prettier"
   ],
   "parser": "babel-eslint",
   "extends": [
-    "airbnb",
-    "prettier",
-    "plugin:jsx-a11y/recommended"
+    "airbnb-base",
+    "prettier"
   ],
   "env": {
     "browser": true,
     "es6": true
   },
   "rules": {
-    "react/jsx-wrap-multilines": 0,
-    "react/jsx-filename-extension": 0,
-    "react/jsx-one-expression-per-line": 0,
+    "prettier/prettier": "error",
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": [
       2,
@@ -26,28 +23,6 @@
       }
     ],
     "class-methods-use-this": 0,
-    "prefer-promise-reject-errors": 0,
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": [
-          "Link"
-        ],
-        "specialLink": [
-          "to"
-        ]
-      }
-    ],
-    "jsx-a11y/label-has-for": [
-      2,
-      {
-        "required": {
-          "some": [
-            "nesting",
-            "id"
-          ]
-        }
-      }
-    ]
+    "prefer-promise-reject-errors": 0
   }
 }

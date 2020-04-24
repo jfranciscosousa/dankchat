@@ -2,14 +2,14 @@ defmodule Dankchat.Chat.Message do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Poison.Encoder, only: [:id, :body, :user, :inserted_at]}
   schema "messages" do
     field :body, :string
-    belongs_to(:user, Dankchat.Auth.User)
+    field :user_id, :string
 
     timestamps()
   end
 
+  @doc false
   def changeset(message, attrs) do
     message
     |> cast(attrs, [:body, :user_id])
