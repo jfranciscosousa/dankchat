@@ -9,7 +9,7 @@ defmodule DankchatWeb.MessageLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"message" => message_params}, socket) do
+  def handle_event("change", %{"message" => message_params}, socket) do
     changeset =
       socket.assigns.message
       |> Chat.change_message(message_params)
@@ -18,7 +18,7 @@ defmodule DankchatWeb.MessageLive.FormComponent do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def handle_event("save", %{"message" => message_params}, socket) do
+  def handle_event("submit", %{"message" => message_params}, socket) do
     case Chat.create_message(message_params) do
       {:ok, message} ->
         DankchatWeb.Endpoint.broadcast("chat", "new_message", message)

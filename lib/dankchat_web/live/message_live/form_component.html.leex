@@ -1,8 +1,8 @@
 <%= f = form_for @changeset, "#",
   id: "message-form",
   phx_target: @myself,
-  phx_change: "validate",
-  phx_submit: "save" %>
+  phx_change: "change",
+  phx_submit: "submit" %>
 
   <%= text_input f, :body, placeholder: "New message" %>
   <%= error_tag f, :body %>

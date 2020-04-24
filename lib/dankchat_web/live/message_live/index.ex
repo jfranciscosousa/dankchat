@@ -3,6 +3,7 @@ defmodule DankchatWeb.MessageLive.Index do
 
   alias Dankchat.Chat
   alias Dankchat.Chat.Message
+  alias DankchatWeb.MessageLive
 
   @topic "chat"
 
@@ -11,23 +12,6 @@ defmodule DankchatWeb.MessageLive.Index do
     Phoenix.PubSub.subscribe(Dankchat.PubSub, @topic)
 
     {:ok, assign(socket, :messages, fetch_messages())}
-  end
-
-  @impl true
-  def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  end
-
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Message")
-    |> assign(:message, Chat.get_message!(id))
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Message")
-    |> assign(:message, %Message{})
   end
 
   defp apply_action(socket, :index, _params) do
@@ -44,6 +28,7 @@ defmodule DankchatWeb.MessageLive.Index do
     {:noreply, assign(socket, :messages, fetch_messages())}
   end
 
+  @impl true
   def handle_info(%{event: "new_message", payload: message}, socket) do
     new_messages = Enum.concat(socket.assigns.messages, [message])
 

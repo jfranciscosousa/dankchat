@@ -17,13 +17,8 @@ defmodule DankchatWeb.Router do
   scope "/", DankchatWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/messages", MessageLive.Index, :index
-    live "/messages/new", MessageLive.Index, :new
-    live "/messages/:id/edit", MessageLive.Index, :edit
 
-    live "/messages/:id", MessageLive.Show, :show
-    live "/messages/:id/show/edit", MessageLive.Show, :edit
+    live "/", MessageLive.Index, :index
   end
 
 

@@ -7,16 +7,11 @@ defmodule Dankchat.Application do
 
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
       Dankchat.Repo,
-      # Start the Telemetry supervisor
       DankchatWeb.Telemetry,
-      # Start the PubSub system
       {Phoenix.PubSub, name: Dankchat.PubSub},
-      # Start the Endpoint (http/https)
+      Dankchat.Presence,
       DankchatWeb.Endpoint
-      # Start a worker by calling: Dankchat.Worker.start_link(arg)
-      # {Dankchat.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
