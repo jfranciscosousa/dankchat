@@ -4,6 +4,7 @@ defmodule Dankchat.Chat.Message do
 
   schema "messages" do
     field :body, :string
+    field :user_id, :string
 
     timestamps()
   end
@@ -11,7 +12,7 @@ defmodule Dankchat.Chat.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:body])
-    |> validate_required([:body])
+    |> cast(attrs, [:body, :user_id])
+    |> validate_required([:body, :user_id])
   end
 end

@@ -1,11 +1,12 @@
 <%= f = form_for @changeset, "#",
   id: "message-form",
+  class: "Chat-messagesForm",
   phx_target: @myself,
   phx_change: "change",
   phx_submit: "submit" %>
 
-  <%= text_input f, :body, placeholder: "New message" %>
+  <%= text_input f, :body, placeholder: "New message", class: "Chat-messagesInput" %>
   <%= error_tag f, :body %>
 
-  <%= submit "Save", phx_disable_with: "Saving..." %>
+  <%= submit "Save", phx_disable_with: "Saving...", hidden: true %>
 </form>

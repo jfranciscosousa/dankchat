@@ -4,6 +4,7 @@ defmodule Dankchat.Repo.Migrations.CreateMessages do
   def change do
     create table(:messages) do
       add :body, :string
+      add :user_id, :string
 
       timestamps()
     end

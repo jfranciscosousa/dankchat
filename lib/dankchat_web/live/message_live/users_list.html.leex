@@ -1,3 +1,7 @@
 <%= for user <- @users do %>
-  <p><%= user %></p>
+  <%= if user == @current_user do %>
+    <p><b><%= user %></b></p>
+  <% else %>
+    <p><%= user %></p>
+  <% end %>
 <% end %>

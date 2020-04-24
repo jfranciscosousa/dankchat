@@ -1,14 +1,31 @@
 <div class="Chat-page">
+  <div class="Chat-messages">
+    <div class="Chat-messagesList" phx-hook="ScrollBottom">
+      <%= for message <- @messages do %>
+        <div class="Chat-message">
+          <div class="Chat-messageHeader">
+              <div class="Chat-messageUser">
+              <%= if message.user_id == @current_user do %>
+                  <b><%= message.user_id %></b>
+              <% else %>
+                  <%= message.user_id %>
+              <% end %>
+            </div>
 
-<div class="Chat-messages" phx-hook="ScrollBottom">
-  <%= for message <- @messages do %>
-    <p>[<%= NaiveDateTime.to_string(message.inserted_at) %>]: <%= message.body %></p>
-  <% end %>
-</div>
+            <span class="Chat-messageTime">
+              <%= NaiveDateTime.to_string(message.inserted_at) %>
+            </span>
+          </div>
 
-  <div class="Chat-users">
-    <%= live_render @socket, DankchatWeb.MessageLive.UsersList, id: :user_list, session: %{"conn_id" => @socket.id} %>
+          <%= message.body %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= live_component @socket, DankchatWeb.MessageLive.FormComponent, id: :new, current_user: @current_user %>
   </div>
 
-  <%= live_component @socket, DankchatWeb.MessageLive.FormComponent, id: :new %>
+  <div class="Chat-users">
+    <%= live_render @socket, DankchatWeb.MessageLive.UsersList, id: :user_list, session: %{"current_user" => @current_user} %>
+  </div>
 </div>

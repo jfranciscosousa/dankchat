@@ -4,18 +4,22 @@ defmodule DankchatWeb.MessageLive.UsersList do
   @topic "users"
 
   @impl true
-  def mount(_params, %{"conn_id" => conn_id}, socket) do
+  def mount(_params, %{"current_user" => current_user}, socket) do
     initial_users = Dankchat.Presence.list(@topic) |> Map.keys()
 
     Phoenix.PubSub.subscribe(Dankchat.PubSub, @topic)
+
     Dankchat.Presence.track(
       self(),
       @topic,
-      conn_id,
+      current_user,
       %{}
     )
 
-    {:ok, assign(socket, :users, initial_users)}
+    {:ok,
+     socket
+     |> assign(:users, initial_users)
+     |> assign(:current_user, current_user)}
   end
 
   @impl true
@@ -32,10 +36,7 @@ defmodule DankchatWeb.MessageLive.UsersList do
         MapSet.new(Map.keys(leaves))
       )
       |> MapSet.to_list()
-
-    IO.inspect(joins)
-
-    IO.inspect(users)
+      |> Enum.sort
 
     {:noreply, assign(socket, :users, users)}
   end
