@@ -8,8 +8,6 @@
   flex-direction: column;
   width: 75vw;
   height: 100vh;
-
-
 }
 
 .Chat-messagesList {
@@ -59,6 +57,10 @@
   margin-bottom: 1rem;
 
   background-color: transparent;
+
+  button {
+    display: none;
+  }
 }
 
 .Chat-messagesInput {

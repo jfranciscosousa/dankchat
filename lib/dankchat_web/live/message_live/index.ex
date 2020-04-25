@@ -12,7 +12,7 @@ defmodule DankchatWeb.MessageLive.Index do
     {:ok,
      socket
      |> assign(:current_user, socket.id)
-     |> assign(:messages, fetch_messages())}
+     |> assign(:messages, Chat.list_messages())}
   end
 
   @impl true
@@ -20,9 +20,5 @@ defmodule DankchatWeb.MessageLive.Index do
     new_messages = Enum.concat(socket.assigns.messages, [message])
 
     {:noreply, assign(socket, :messages, new_messages)}
-  end
-
-  defp fetch_messages do
-    Chat.list_messages()
   end
 end

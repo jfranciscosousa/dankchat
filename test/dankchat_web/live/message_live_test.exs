@@ -27,11 +27,16 @@ defmodule DankchatWeb.MessageLiveTest do
       assert html =~ message.body
     end
 
-    test "lists the users", %{conn: conn} do
-      {:ok, view, html} = live(conn, Routes.message_index_path(conn, :index))
+    test "lists the users" do
+      conn1 = build_conn()
+      conn2 = build_conn()
+      {:ok, view1, _html} = live(conn1, Routes.message_index_path(conn1, :index))
+      {:ok, view2, html} = live(conn2, Routes.message_index_path(conn2, :index))
 
-      assert html =~ view.id
+      assert html =~ view1.id
+      assert html =~ view2.id
     end
+
 
     test "saves new message", %{conn: conn} do
       {:ok, view, _html} = live(conn, Routes.message_index_path(conn, :index))
