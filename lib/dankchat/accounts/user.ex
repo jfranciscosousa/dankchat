@@ -23,7 +23,8 @@ defmodule Dankchat.Accounts.User do
   defp encrypt_fields(changeset) do
     case changeset.valid? do
       true ->
-        encrypted_password = changeset.changes |> Map.get(:password) |> AES.encrypt()
+        encrypted_password =
+          changeset.changes |> Map.get(:password) |> AES.encrypt()
 
         changeset
         |> put_change(:encrypted_password, encrypted_password)

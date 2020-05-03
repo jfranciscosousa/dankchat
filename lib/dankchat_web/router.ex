@@ -44,4 +44,3 @@ defmodule DankchatWeb.Router do
     end
   end
 end
-

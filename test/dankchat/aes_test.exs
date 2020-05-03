@@ -15,7 +15,7 @@ defmodule Dankchat.AESTest do
   end
 
   test "decrypt/1 ciphertext that was encrypted with default key" do
-    plaintext = "hello" |> AES.encrypt |> AES.decrypt()
+    plaintext = "hello" |> AES.encrypt() |> AES.decrypt()
     assert plaintext == "hello"
   end
 end

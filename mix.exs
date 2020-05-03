@@ -35,6 +35,7 @@ defmodule Dankchat.MixProject do
     [
       {:cloak, "1.0.2"},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_machina, "~> 2.4", runtime: false},
       {:phoenix, "~> 1.5.1"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},

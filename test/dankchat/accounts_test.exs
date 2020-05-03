@@ -47,27 +47,51 @@ defmodule Dankchat.AccountsTest do
     end
 
     test "authenticate_or_create/2 creates a user if it does not exist" do
-      assert {:ok, %User{} = user} = Accounts.authenticate_or_create(@valid_attrs.username, @valid_attrs.password)
+      assert {:ok, %User{} = user} =
+               Accounts.authenticate_or_create(
+                 @valid_attrs.username,
+                 @valid_attrs.password
+               )
 
       assert user.username == @valid_attrs.username
       assert AES.decrypt(user.encrypted_password) == @valid_attrs.password
     end
 
     test "authenticate_or_create/2 if the user exists, authenticates with a correct password" do
-      Accounts.authenticate_or_create(@valid_attrs.username, @valid_attrs.password)
-      assert {:ok, %User{} = user} = Accounts.authenticate_or_create(@valid_attrs.username, @valid_attrs.password)
+      Accounts.authenticate_or_create(
+        @valid_attrs.username,
+        @valid_attrs.password
+      )
+
+      assert {:ok, %User{} = user} =
+               Accounts.authenticate_or_create(
+                 @valid_attrs.username,
+                 @valid_attrs.password
+               )
 
       assert user.username == @valid_attrs.username
       assert AES.decrypt(user.encrypted_password) == @valid_attrs.password
     end
 
     test "authenticate_or_create/2 if the user exists it returns nil with a wrong password" do
-      Accounts.authenticate_or_create(@valid_attrs.username, @valid_attrs.password)
-      assert {:error} = Accounts.authenticate_or_create(@valid_attrs.username, "wrong_password")
+      Accounts.authenticate_or_create(
+        @valid_attrs.username,
+        @valid_attrs.password
+      )
+
+      assert {:error} =
+               Accounts.authenticate_or_create(
+                 @valid_attrs.username,
+                 "wrong_password"
+               )
     end
 
     test "authenticate_or_create/2 with invalid data returns error changeset" do
-      assert {:error,  %Ecto.Changeset{}} = Accounts.authenticate_or_create(@invalid_attrs.username, @invalid_attrs.password)
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.authenticate_or_create(
+                 @invalid_attrs.username,
+                 @invalid_attrs.password
+               )
     end
 
     test "update_user/2 with valid data updates the user" do
@@ -83,6 +107,7 @@ defmodule Dankchat.AccountsTest do
 
       assert {:error, %Ecto.Changeset{}} =
                Accounts.update_user(user, @invalid_attrs)
+
       assert Accounts.get_user!(user.id) == user
     end
 

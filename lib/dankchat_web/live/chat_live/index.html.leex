@@ -9,10 +9,10 @@
         <div class="Chat-message">
           <div class="Chat-messageHeader">
               <div class="Chat-messageUser">
-              <%= if message.user_id == @current_user.username do %>
-                  <b><%= message.user_id %></b>
+              <%= if message.user.id == @current_user.id do %>
+                  <b><%= message.user.username %></b>
               <% else %>
-                  <%= message.user_id %>
+                  <%= message.user.username %>
               <% end %>
             </div>
 

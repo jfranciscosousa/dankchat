@@ -9,6 +9,10 @@ defmodule Dankchat.Repo.Migrations.CreateUsers do
       timestamps()
     end
 
+    alter table(:messages) do
+      remove :user_id, :string
+      add :user_id, references(:users), null: false, index: true
+    end
 
     create unique_index(:users, :username)
   end
