@@ -7,7 +7,7 @@ defmodule DankchatWeb.ChatLive.Index do
   @topic "chat"
 
   @impl true
-  def mount(_params, %{"current_user_id" => current_user_id} = session, socket) do
+  def mount(_params, %{"current_user_id" => current_user_id}, socket) do
     case Accounts.get_user(current_user_id) do
       nil ->
         {:ok, push_redirect(socket, to: "/")}

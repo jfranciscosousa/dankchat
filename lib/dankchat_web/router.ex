@@ -17,8 +17,9 @@ defmodule DankchatWeb.Router do
   scope "/", DankchatWeb do
     pipe_through :browser
 
-    get "/", UserController, :new
-    post "/users", UserController, :create
+    get "/", AuthController, :new
+    post "/auth", AuthController, :create
+    delete "/auth", AuthController, :delete
     live "/chat", ChatLive.Index, :index
   end
 
@@ -43,3 +44,4 @@ defmodule DankchatWeb.Router do
     end
   end
 end
+

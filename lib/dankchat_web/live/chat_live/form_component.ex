@@ -16,12 +16,11 @@ defmodule DankchatWeb.ChatLive.FormComponent do
   @impl true
   def handle_event("change", %{"message" => message_params}, socket) do
     new_message_params =
-      message_params |> Map.put("user_id", socket.assigns.current_user.id)
+      message_params |> Map.put("user_id", socket.assigns.current_user.username)
 
     changeset =
       socket.assigns.message
       |> Chat.change_message(new_message_params)
-      |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
   end

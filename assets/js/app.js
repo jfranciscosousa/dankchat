@@ -12,8 +12,7 @@ const liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken },
   hooks: {
     ScrollBottom: {
-      mount() {
-        debugger
+      mounted() {
         this.el.scrollTo(0, this.el.scrollHeight);
       },
       updated() {

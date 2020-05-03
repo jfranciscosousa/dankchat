@@ -12,8 +12,6 @@ defmodule DankchatWeb.ChatLive.UsersList do
     initial_user_ids = Dankchat.Presence.list(@topic) |> Map.keys()
     initial_users = list_users(initial_user_ids)
 
-    IO.inspect(initial_users)
-
     Phoenix.PubSub.subscribe(Dankchat.PubSub, @topic)
 
     Dankchat.Presence.track(

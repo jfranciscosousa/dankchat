@@ -1,6 +1,10 @@
 <div class="Chat-page">
-  <div class="Chat-messages">
-    <div class="Chat-messagesList" phx-hook="ScrollBottom">
+  <div class="Chat-main">
+    <div class="Chat-nav">
+      <%= link("Logout", to: Routes.auth_path(@socket, :delete), method: :delete) %>
+    </div>
+
+    <div class="Chat-messages" phx-hook="ScrollBottom">
       <%= for message <- @messages do %>
         <div class="Chat-message">
           <div class="Chat-messageHeader">

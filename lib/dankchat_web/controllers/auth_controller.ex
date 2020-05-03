@@ -1,10 +1,8 @@
-defmodule DankchatWeb.UserController do
+defmodule DankchatWeb.AuthController do
   use DankchatWeb, :controller
 
   alias Dankchat.Accounts
   alias Dankchat.Accounts.User
-  alias DankchatWeb.ChatLive
-  alias Phoenix.LiveView.Controller
 
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
@@ -12,8 +10,7 @@ defmodule DankchatWeb.UserController do
   end
 
   def create(conn, %{
-        "user" =>
-          %{"password" => password, "username" => username} = user_params
+        "user" => %{"password" => password, "username" => username}
       }) do
     case Accounts.authenticate_or_create(username, password) do
       {:ok, user} ->
@@ -25,7 +22,17 @@ defmodule DankchatWeb.UserController do
         render(conn, "new.html", changeset: changeset)
 
       {:error} ->
-        {:noreply, put_flash(conn, :error, "User combination not available")}
+        changeset = Accounts.change_user(%User{})
+
+        conn
+        |> put_flash(:error, "User combination not available")
+        |> render("new.html", changeset: changeset)
     end
+  end
+
+  def delete(conn, _params) do
+    conn
+    |> delete_session(:current_user_id)
+    |> redirect(to: Routes.auth_path(conn, :new))
   end
 end
