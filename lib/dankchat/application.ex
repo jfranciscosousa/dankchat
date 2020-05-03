@@ -7,6 +7,7 @@ defmodule Dankchat.Application do
 
   def start(_type, _args) do
     children = [
+      Dankchat.Vault,
       Dankchat.Repo,
       DankchatWeb.Telemetry,
       {Phoenix.PubSub, name: Dankchat.PubSub},

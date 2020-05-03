@@ -1,4 +1,4 @@
-defmodule DankchatWeb.MessageLive.FormComponent do
+defmodule DankchatWeb.ChatLive.FormComponent do
   use DankchatWeb, :live_component
 
   alias Dankchat.Chat
@@ -16,7 +16,7 @@ defmodule DankchatWeb.MessageLive.FormComponent do
   @impl true
   def handle_event("change", %{"message" => message_params}, socket) do
     new_message_params =
-      message_params |> Map.put("user_id", socket.assigns.current_user)
+      message_params |> Map.put("user_id", socket.assigns.current_user.id)
 
     changeset =
       socket.assigns.message
@@ -28,7 +28,7 @@ defmodule DankchatWeb.MessageLive.FormComponent do
 
   def handle_event("submit", %{"message" => message_params}, socket) do
     new_message_params =
-      message_params |> Map.put("user_id", socket.assigns.current_user)
+      message_params |> Map.put("user_id", socket.assigns.current_user.username)
 
     case Chat.create_message(new_message_params) do
       {:ok, message} ->

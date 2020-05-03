@@ -33,6 +33,7 @@ defmodule Dankchat.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cloak, "1.0.2"},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:phoenix, "~> 1.5.1"},
       {:phoenix_ecto, "~> 4.1"},
