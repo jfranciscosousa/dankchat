@@ -1,0 +1,7 @@
+<%= for user <- @users do %>
+  <%= if user.id == @current_user.id do %>
+    <p><b><%= user.username %></b></p>
+  <% else %>
+    <p><%= user.username %></p>
+  <% end %>
+<% end %>

@@ -24,7 +24,7 @@ else
   set -e
 
   printf "Importing nodejs release team keyring... "
-  bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring 2>/dev/null
+  bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
   echo "Done!"
 
   asdf install

@@ -3,14 +3,18 @@
   flex-direction: row;
 }
 
-.Chat-messages {
+.Chat-main {
   display: flex;
   flex-direction: column;
   width: 75vw;
   height: 100vh;
 }
 
-.Chat-messagesList {
+.Chat-nav {
+  padding: 1rem;
+}
+
+.Chat-messages {
   height: 100%;
 
   padding-top: 1rem;

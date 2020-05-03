@@ -28,14 +28,20 @@ config :dankchat, DankchatWeb.Endpoint,
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  encryption_key: encryption_key
 
-# ## Using releases (Elixir v1.9+)
-#
-# If you are doing OTP releases, you need to instruct Phoenix
-# to start each relevant endpoint:
-#
-#     config :dankchat, DankchatWeb.Endpoint, server: true
-#
-# Then you can assemble a release by calling `mix release`.
-# See `mix help release` for more information.
+encryption_key =
+  System.get_env("ENCRYPTION_KEY") ||
+    raise """
+    environment variable ENCRYPTION_KEY is missing.
+    You can generate one by calling: mix phx.gen.secret
+    """
+
+if String.length(encryption_key) != 44 do
+  raise """
+    ENCRYPTION_KEY must be exactly 44 characters long!
+  """
+end
+
+config :dankchat, Encryption.AES, encryption_key: encryption_key

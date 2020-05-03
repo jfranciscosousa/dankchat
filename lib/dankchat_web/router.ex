@@ -17,7 +17,10 @@ defmodule DankchatWeb.Router do
   scope "/", DankchatWeb do
     pipe_through :browser
 
-    live "/", MessageLive.Index, :index
+    get "/", AuthController, :new
+    post "/auth", AuthController, :create
+    delete "/auth", AuthController, :delete
+    live "/chat", ChatLive.Index, :index
   end
 
   # Other scopes may use custom stacks.

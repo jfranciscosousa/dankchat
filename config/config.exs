@@ -31,6 +31,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Encryption key for our custom module
+config :dankchat, Encryption.AES,
+  encryption_key: "AqHj+8P7jWKJ2vDekIO44Wr78Y7FC0SDTZPKEvi9aDY="
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
