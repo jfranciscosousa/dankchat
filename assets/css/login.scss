@@ -1,3 +1,5 @@
+@import "utils.scss";
+
 .Login-form {
   display: flex;
   flex-direction: column;
@@ -5,9 +7,7 @@
   justify-content: center;
   height: 100vh;
 
-  & > * + * {
-    margin-top: 2rem;
-  }
+  @include flex(column, 2rem);
 }
 
 .Login-inputGroup {

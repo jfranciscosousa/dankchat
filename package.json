@@ -38,6 +38,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "core-js": "^3.6.5",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "phoenix": "file:./deps/phoenix",
