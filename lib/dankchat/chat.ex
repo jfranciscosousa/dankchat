@@ -5,8 +5,8 @@ defmodule Dankchat.Chat do
 
   import Ecto.Query, warn: false
 
-  alias Dankchat.Repo
   alias Dankchat.Chat.Message
+  alias Dankchat.Repo
 
   def list_messages do
     Repo.all(Message) |> Repo.preload(:user)

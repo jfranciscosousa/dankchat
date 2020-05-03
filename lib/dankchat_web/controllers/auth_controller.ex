@@ -17,7 +17,7 @@ defmodule DankchatWeb.AuthController do
       {:ok, user} ->
         conn
         |> put_session(:current_user_id, user.id)
-        |> redirect(to: Routes.chat_index_path(conn, :index))
+        |> redirect(to: Routes.chat_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

@@ -16,6 +16,7 @@ defmodule Dankchat.Accounts.User do
     user
     |> cast(attrs, [:username, :password])
     |> validate_required([:username, :password])
+    |> validate_format(:username, ~r/^[a-z0-9_-]+$/)
     |> unique_constraint(:username)
     |> encrypt_fields
   end

@@ -14,10 +14,10 @@ defmodule DankchatWeb.AuthControllerTest do
 
   describe "auth #create" do
     test "redirects to chat when user created", %{conn: conn} do
-      user_params = params_for(:user)
+      user_params = params_for(:user_prams)
       conn = post(conn, Routes.auth_path(conn, :create), user: user_params)
 
-      assert redirected_to(conn) == Routes.chat_index_path(conn, :index)
+      assert redirected_to(conn) == Routes.chat_path(conn, :index)
     end
 
     test "redirects to chat when user logged in succesfully", %{conn: conn} do
@@ -25,10 +25,10 @@ defmodule DankchatWeb.AuthControllerTest do
 
       conn =
         post(conn, Routes.auth_path(conn, :create),
-          user: %{username: user.username, password: user.password}
+          user: %{username: user.username, password: "foobar"}
         )
 
-      assert redirected_to(conn) == Routes.chat_index_path(conn, :index)
+      assert redirected_to(conn) == Routes.chat_path(conn, :index)
     end
 
     test "renders errors when login is wrong", %{conn: conn} do

@@ -4,9 +4,9 @@ defmodule Dankchat.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Dankchat.Accounts.User
   alias Dankchat.AES
   alias Dankchat.Repo
-  alias Dankchat.Accounts.User
 
   def list_users do
     Repo.all(User)

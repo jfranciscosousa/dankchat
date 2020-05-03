@@ -5,14 +5,17 @@ defmodule Dankchat.Factory do
   alias Dankchat.Chat.Message
 
   def user_factory do
-    user = %User{}
-
-    attrs = %{
-      username: sequence(:username, &"user ##{&1}"),
-      password: "user password"
+    %User{
+      username: sequence(:username, &"user_#{&1}"),
+      encrypted_password: Dankchat.AES.encrypt("foobar")
     }
+  end
 
-    struct(user, User.changeset(user, attrs).changes)
+  def user_prams_factory do
+    %{
+      username: sequence(:username, &"user_prams_#{&1}"),
+      password: "foobar"
+    }
   end
 
   def message_factory do

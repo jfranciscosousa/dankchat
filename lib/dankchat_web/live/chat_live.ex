@@ -1,8 +1,8 @@
-defmodule DankchatWeb.ChatLive.Index do
+defmodule DankchatWeb.ChatLive do
   use DankchatWeb, :live_view
 
-  alias Dankchat.Chat
   alias Dankchat.Accounts
+  alias Dankchat.Chat
 
   @topic "chat"
 

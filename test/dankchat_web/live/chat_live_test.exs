@@ -11,7 +11,7 @@ defmodule DankchatWeb.MessageLiveTest do
       redirect_url = Routes.auth_path(conn, :new)
 
       assert {:error, {:live_redirect, %{to: ^redirect_url} = _}} =
-               live(conn, Routes.chat_index_path(conn, :index))
+               live(conn, Routes.chat_path(conn, :index))
     end
 
     test "lists all messages", %{conn: conn} do
@@ -21,7 +21,7 @@ defmodule DankchatWeb.MessageLiveTest do
       {:ok, _view, html} =
         conn
         |> init_test_session(current_user_id: user.id)
-        |> live(Routes.chat_index_path(conn, :index))
+        |> live(Routes.chat_path(conn, :index))
 
       for message <- messages do
         assert html =~ message.body
@@ -35,12 +35,12 @@ defmodule DankchatWeb.MessageLiveTest do
 
       build_conn()
       |> init_test_session(current_user_id: other_user.id)
-      |> live(Routes.chat_index_path(conn, :index))
+      |> live(Routes.chat_path(conn, :index))
 
       {:ok, _view, html} =
         conn
         |> init_test_session(current_user_id: user.id)
-        |> live(Routes.chat_index_path(conn, :index))
+        |> live(Routes.chat_path(conn, :index))
 
       for user <- users do
         assert html =~ user.username
@@ -53,7 +53,7 @@ defmodule DankchatWeb.MessageLiveTest do
       {:ok, view, _html} =
         conn
         |> init_test_session(current_user_id: user.id)
-        |> live(Routes.chat_index_path(conn, :index))
+        |> live(Routes.chat_path(conn, :index))
 
       view
       |> form("#message-form", message: %{body: "meme"})

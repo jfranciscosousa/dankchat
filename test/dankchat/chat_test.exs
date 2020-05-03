@@ -10,10 +10,7 @@ defmodule Dankchat.ChatTest do
     test "list_messages/0 returns all messages" do
       messages = insert_list(3, :message)
 
-      assert Chat.list_messages()
-             |> Enum.map(fn message -> Map.delete(message, :user) end) ==
-               messages
-               |> Enum.map(fn message -> Map.delete(message, :user) end)
+      assert Chat.list_messages() == messages
     end
 
     test "get_message!/1 returns the message with given id" do

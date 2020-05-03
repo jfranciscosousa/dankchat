@@ -20,7 +20,7 @@ defmodule DankchatWeb.Router do
     get "/", AuthController, :new
     post "/auth", AuthController, :create
     delete "/auth", AuthController, :delete
-    live "/chat", ChatLive.Index, :index
+    live "/chat", ChatLive, :index
   end
 
   # Other scopes may use custom stacks.

@@ -28,14 +28,14 @@ config :dankchat, DankchatWeb.Endpoint,
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
-  secret_key_base: secret_key_base,
-  encryption_key: encryption_key
+  secret_key_base: secret_key_base
 
 encryption_key =
   System.get_env("ENCRYPTION_KEY") ||
     raise """
     environment variable ENCRYPTION_KEY is missing.
-    You can generate one by calling: mix phx.gen.secret
+    You can generate one by running this on iex:
+    :crypto.strong_rand_bytes(32) |> :base64.encode
     """
 
 if String.length(encryption_key) != 44 do
