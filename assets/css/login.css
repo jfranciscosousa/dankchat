@@ -1,13 +1,10 @@
-@import "utils.scss";
-
 .Login-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
   height: 100vh;
-
-  @include flex(column, 2rem);
 }
 
 .Login-inputGroup {

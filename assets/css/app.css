@@ -1,9 +1,9 @@
 /* This file is for your main application css. */
 @import "../../node_modules/normalize.css/normalize.css";
 @import "../../node_modules/nprogress/nprogress.css";
-@import "chat.scss";
-@import "flash.scss";
-@import "login.scss";
+@import "./chat.css";
+@import "./flash.css";
+@import "./login.css";
 
 /* Reset */
 
