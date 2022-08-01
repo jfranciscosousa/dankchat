@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :dankchat, DankchatWeb.Endpoint,
   url: [host: "dank-chat.herokuapp.com", port: 80],
