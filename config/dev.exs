@@ -14,19 +14,14 @@ config :dankchat, Dankchat.Repo,
 #
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
-# with webpack to recompile .js and .css sources.
+# with vite to recompile .js and .css sources.
 config :dankchat, DankchatWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
   watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin"
-    ]
+    yarn: ["run", "watch"]
   ]
 
 # ## SSL Support
